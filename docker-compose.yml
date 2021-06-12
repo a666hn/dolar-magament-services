@@ -1,0 +1,28 @@
+version: "3.8"
+
+networks:
+  nt-666:
+    driver: bridge
+    name: nt-666
+
+services:
+  # Postgres database Account
+  postgres_database:
+    image: postgres:12.2
+    restart: always
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME_ACCOUNT}
+      - POSTGRES_USER=${DATABASE_USER_ACCOUNT}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD_ACCOUNT}
+    ports:
+      - '${DATABASE_PORT_ACCOUNT}:5432'
+    networks:
+      - nt-666
+    
+  # Redis Services
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - nt-666
