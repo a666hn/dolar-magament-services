@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DbConnectionConfigurationClass } from './databases/configs/connection.config';
 import * as dotenv from 'dotenv';
 import { AccountAPP } from './module.list';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { ResponeMiddleware } from './globals/middlewares/response.middleware';
+import { CoreModule } from './core/core.module';
+import { AppController } from './app.controller';
 
 dotenv.config();
 
@@ -23,14 +23,11 @@ if (mode === 'development') {
         // will make the .env properties available throughout the application.
         ConfigModule.forRoot({ isGlobal: true }),
         TypeOrmModule.forRoot(connection),
+        CoreModule,
 
         ...AccountAPP
     ],
-    providers: [
-        {
-            provide: APP_INTERCEPTOR,
-            useClass: ResponeMiddleware
-        }
-    ]
+    controllers: [AppController],
+    providers: []
 })
 export class AppModule {}
