@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { RolesEntity } from "src/databases/entities/roles.entity";
 import { AuthRepository } from "src/databases/repositories/account/auth.repository";
 import { RoleRepository } from "src/databases/repositories/account/role.repository";
-import { AddRoleDto } from "src/interfaces/dto/account/role.dto";
+import { AddRoleDto, FilterRoleDto } from "src/interfaces/dto/account/role.dto";
 import { AuthUsecase } from "./auth.usecase";
 
 @Injectable()
@@ -50,5 +50,9 @@ export class RolesUseCase {
         }
 
         return this.roleRepository.AssignRoleToUser(role, user);
+    }
+
+    async GetRoles(filterRoleDto: FilterRoleDto): Promise<RolesEntity[]> {
+        return this.roleRepository.GetRoles(filterRoleDto);
     }
 }

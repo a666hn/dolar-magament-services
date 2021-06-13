@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
 import { RolesEntity } from "src/databases/entities/roles.entity";
-import { AddRoleDto } from "src/interfaces/dto/account/role.dto";
+import { AddRoleDto, FilterRoleDto } from "src/interfaces/dto/account/role.dto";
 import { RolesUseCase } from "src/interfaces/usecases/account/role.usecase";
 
 @Controller('role')
@@ -31,5 +31,10 @@ export class RoleController {
         @Body('roleId') roleId: string
     ): Promise<RolesEntity> {
         return this.roleUsecase.AssignRoleToUser(userId, roleId);
+    }
+
+    @Get()
+    GetRoles(@Query() filterRoleDto: FilterRoleDto): Promise<RolesEntity[]> {
+        return this.roleUsecase.GetRoles(filterRoleDto);
     }
 }

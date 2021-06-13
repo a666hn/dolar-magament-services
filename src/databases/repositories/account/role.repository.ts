@@ -1,7 +1,7 @@
 import { BadRequestException } from "@nestjs/common";
 import { RolesEntity } from "src/databases/entities/roles.entity";
 import { UsersEntity } from "src/databases/entities/users.entity";
-import { AddRoleDto } from "src/interfaces/dto/account/role.dto";
+import { AddRoleDto, FilterRoleDto } from "src/interfaces/dto/account/role.dto";
 import { EntityRepository, Repository } from "typeorm";
 
 @EntityRepository(RolesEntity)
@@ -37,5 +37,22 @@ export class RoleRepository extends Repository<RolesEntity> {
         } catch (err) {
             throw new BadRequestException('Something is gonna be wrong');
         }
+    }
+
+    async GetRoles(filterRoleDto: FilterRoleDto): Promise<RolesEntity[]> {
+        const { id, name } = filterRoleDto;
+        const query = this.createQueryBuilder('role');
+
+        query.select(['role.id', 'role.roleName', 'role.createdAt', 'role.updatedAt', 'role.version']);
+
+        if (id) {
+            query.andWhere('role.id = :id', { id });
+        }
+
+        if (name) {
+            query.andWhere('role.roleName = :name', { name });
+        }
+
+        return query.getMany();
     }
 }
