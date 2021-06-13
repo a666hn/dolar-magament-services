@@ -1,45 +1,30 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { PermissionsEntity } from "./permissions.entity";
-import { UsersEntity } from "./users.entity";
+import { RolesEntity } from "./roles.entity";
 
-@Entity('roles')
-export class RolesEntity {
+@Entity('permissions')
+export class PermissionsEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ unique: true })
-    roleName: string;
+    name: string;
 
     @Column({ nullable: true })
     description: string;
 
-    @ManyToMany(() => UsersEntity)
-    @JoinTable({
-        name: 'roles_user',
-        joinColumn: {
-            name: 'roles',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'users',
-            referencedColumnName: 'id'
-        }
-    })
-    users: UsersEntity[];
-
-    @ManyToMany(() => PermissionsEntity, { nullable: true })
+    @ManyToMany(() => RolesEntity, { nullable: true })
     @JoinTable({
         name: 'role_permission',
         joinColumn: {
-            name: 'roles',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
             name: 'permissions',
             referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'roles',
+            referencedColumnName: 'id'
         }
     })
-    permissions?: PermissionsEntity[];
+    roles?: RolesEntity[];
 
     @Column()
     createdAt: Date;

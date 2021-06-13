@@ -2,7 +2,7 @@ import { Exclude } from "class-transformer";
 import { EUsersStatus } from "src/globals/constant/enum.constant";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Name } from "./embeded/name.embeded";
-// import { UsersProfileEntity } from "./users_profile.entity";
+import { UsersProfileEntity } from "./users_profile.entity";
 
 @Entity('users')
 export class UsersEntity {
@@ -34,9 +34,9 @@ export class UsersEntity {
     @Column({ default: false })
     isEmailVerified: boolean;
 
-    // @OneToOne(() => UsersProfileEntity, { nullable: true })
-    // @JoinColumn()
-    // profile: UsersProfileEntity
+    @OneToOne(() => UsersProfileEntity, { nullable: true })
+    @JoinColumn()
+    profile: UsersProfileEntity
 
     @Column()
     createdAt: Date;
