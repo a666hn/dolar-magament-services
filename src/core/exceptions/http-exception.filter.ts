@@ -9,8 +9,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse<Response>();
         const request = ctx.getRequest<Request>();
+        const exceptionResponse = exception.getResponse()
         const status = exception.getStatus();
-        const message = exception.message
+        // const message = exception.message; // Not cover when add error message from class-validator
+        const message = exceptionResponse["message"].toString(); // Use this for catch error message when using class validator
 
         const payload: IResponseHttp<null> = {
             code: status,
