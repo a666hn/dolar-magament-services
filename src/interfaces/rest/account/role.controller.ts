@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from "@nestjs/common";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { GetAuthenticatedUser } from "src/core/decorator/user.decorator";
 import { RolesEntity } from "src/databases/entities/roles.entity";
@@ -36,6 +36,7 @@ export class RoleController {
 
     @Post('assign-role')
     @UseGuards(AuthGuard())
+    @UseInterceptors(ClassSerializerInterceptor)
     AssignRoleToUser(
         @Body('userId') userId: string,
         @Body('roleId') roleId: string

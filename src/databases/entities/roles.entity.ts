@@ -1,10 +1,11 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { PermissionsEntity } from "./permissions.entity";
+import { Exclude } from "class-transformer";
+import { snakeCase, toUpper } from "lodash";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { UsersEntity } from "./users.entity";
 
 @Entity('roles')
 export class RolesEntity {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryColumn()
     id: string;
 
     @Column({ unique: true })
@@ -25,21 +26,8 @@ export class RolesEntity {
             referencedColumnName: 'id'
         }
     })
+    @Exclude()
     users: UsersEntity[];
-
-    @ManyToMany(() => PermissionsEntity, { nullable: true })
-    @JoinTable({
-        name: 'role_permission',
-        joinColumn: {
-            name: 'roles',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'permissions',
-            referencedColumnName: 'id',
-        }
-    })
-    permissions?: PermissionsEntity[];
 
     @Column()
     createdAt: Date;
@@ -58,7 +46,7 @@ export class RolesEntity {
 
     @BeforeInsert()
     updateInsertedData() {
-        this.roleName = this.roleName.toUpperCase();
+        this.id = toUpper(snakeCase(this.roleName));
         this.createdAt = new Date();
     }
 

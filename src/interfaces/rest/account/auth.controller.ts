@@ -20,14 +20,4 @@ export class AuthController {
     UserSignIn(@Body() userSignInDto: UserSignInDto): Promise<ISignInResponse<UsersEntity>> {
         return this.aUsecase.UserSignIn(userSignInDto);
     }
-
-    // @HttpCode(200)
-    // @Post('test')
-    // @UseGuards(AuthGuard())
-    // @UseInterceptors(ClassSerializerInterceptor)
-    // TestAuth(
-    //     @GetAuthenticatedUser('id') id: string
-    // ) {
-    //     return id;
-    // }
 }
