@@ -58,6 +58,7 @@ export class RolesEntity {
 
     @BeforeInsert()
     updateInsertedData() {
+        this.roleName = this.roleName.toUpperCase();
         this.createdAt = new Date();
     }
 

@@ -9,6 +9,9 @@ export class PermissionsEntity {
     @Column({ unique: true })
     name: string;
 
+    @Column()
+    scoped: string;
+
     @Column({ nullable: true })
     description: string;
 
@@ -43,6 +46,8 @@ export class PermissionsEntity {
 
     @BeforeInsert()
     updateInsertedData() {
+        this.name = this.name.toUpperCase();
+        this.scoped = this.scoped.toUpperCase();
         this.createdAt = new Date();
     }
 

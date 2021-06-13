@@ -15,18 +15,18 @@ export class RolesUseCase {
         private authRepository: AuthRepository
     ) {}
 
-    async RegisterRole(roleDto: AddRoleDto): Promise<RolesEntity> {
-        return this.roleRepository.AddNewRole(roleDto);
+    async RegisterRole(roleDto: AddRoleDto, userId: string): Promise<RolesEntity> {
+        return this.roleRepository.AddNewRole(roleDto, userId);
     }
 
-    async UpdateRole(id: string, description: string): Promise<RolesEntity> {
+    async UpdateRole(id: string, description: string, userId: string): Promise<RolesEntity> {
         const role = await this.roleRepository.findOne(id);
 
         if (!role) {
             throw new NotFoundException(`Cannot found role with id ${id}`);
         }
 
-        return this.roleRepository.UpdateRole(role, description);
+        return this.roleRepository.UpdateRole(role, description, userId);
     }
 
     async DeleteRole(id: string): Promise<void> {
