@@ -5,3 +5,11 @@ export enum EUsersStatus {
     REGISTERED = 'REGISTERED',
     SUSPEND = 'SUSSPEND'
 }
+
+export enum PostgressCodeError {
+    DEAD_LOCK_DETECTED = '40P01',
+    FOREIGN_KEY_VIOLATION = '23503',
+    NULL_VALUE_NOT_ALLOWED = '22004',
+    NOT_NULL_VIOLATION = '23502',
+    UNIQUE_VIOLATION = '23505'
+}

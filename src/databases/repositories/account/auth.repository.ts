@@ -3,6 +3,7 @@ import { UserRegistrationDto } from "src/interfaces/dto/account/users.dto";
 import { CreatePassword } from "src/utils/util";
 import { EntityRepository, Repository } from "typeorm";
 import * as bcrypt from 'bcrypt';
+import { HandlePostgressError } from "src/utils/postgress-handle-error";
 
 @EntityRepository(UsersEntity)
 export class AuthRepository extends Repository<UsersEntity> {
@@ -16,7 +17,7 @@ export class AuthRepository extends Repository<UsersEntity> {
 
             return user;
         } catch (err) {
-            console.log("Error:", err.code)
+            HandlePostgressError(err.code, err.message)
         }
     }
 

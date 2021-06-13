@@ -1,7 +1,7 @@
-import { BadRequestException } from "@nestjs/common";
 import { RolesEntity } from "src/databases/entities/roles.entity";
 import { UsersEntity } from "src/databases/entities/users.entity";
 import { AddRoleDto, FilterRoleDto } from "src/interfaces/dto/account/role.dto";
+import { HandlePostgressError } from "src/utils/postgress-handle-error";
 import { EntityRepository, Repository } from "typeorm";
 
 @EntityRepository(RolesEntity)
@@ -15,16 +15,20 @@ export class RoleRepository extends Repository<RolesEntity> {
 
             return _role;
         } catch (err) {
-            throw new BadRequestException('Error');
+            HandlePostgressError(err.code, err.message);
         }
     }
 
     async UpdateRole(role: RolesEntity, description: string): Promise<RolesEntity> {
         role.description = description;
 
-        await this.save(role);
+        try {
+            await this.save(role);
 
-        return role;
+            return role;
+        } catch (err) {
+            HandlePostgressError(err.code, err.message);
+        }
     }
 
     async AssignRoleToUser(role: RolesEntity, user: UsersEntity): Promise<RolesEntity> {
@@ -35,7 +39,7 @@ export class RoleRepository extends Repository<RolesEntity> {
 
             return role;
         } catch (err) {
-            throw new BadRequestException('Something is gonna be wrong');
+            HandlePostgressError(err.code, err.message);
         }
     }
 
@@ -53,6 +57,10 @@ export class RoleRepository extends Repository<RolesEntity> {
             query.andWhere('role.roleName = :name', { name });
         }
 
-        return query.getMany();
+        try {
+            return query.getMany();
+        } catch (err) {
+            HandlePostgressError(err.code, err.message);
+        }
     }
 }
