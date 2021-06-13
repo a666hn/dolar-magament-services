@@ -1,21 +1,24 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersEntity } from "src/databases/entities/users.entity";
 import { AuthRepository } from "src/databases/repositories/account/auth.repository";
 import { UserRegistrationDto, UserSignInDto } from "src/interfaces/dto/account/users.dto";
+import { IPayloadJwt, ISignInResponse } from "src/interfaces/interface/auth.interface";
 
 @Injectable()
 export class AuthUsecase {
     constructor(
         @InjectRepository(AuthRepository)
-        private authRepository: AuthRepository
+        private authRepository: AuthRepository,
+        private jwtService: JwtService
     ) {}
 
     async RegisterUser(uDto: UserRegistrationDto): Promise<UsersEntity> {
         return this.authRepository.userRegistration(uDto);
     }
 
-    async UserSignIn(userSignInDto: UserSignInDto): Promise<UsersEntity> {
+    async UserSignIn(userSignInDto: UserSignInDto): Promise<ISignInResponse<UsersEntity>> {
         const { email, password } = userSignInDto
         const user: UsersEntity = await this.authRepository.findOne({ where: { email } });
 
@@ -29,6 +32,20 @@ export class AuthUsecase {
             throw new BadRequestException('Password not match')
         }
 
-        return user;
+        const payload: IPayloadJwt = {
+            uid: user.id,
+            username: user?.username,
+            email: user.email,
+            isEmailVerified: user.isEmailVerified
+        }
+
+        const token: string = this.jwtService.sign(payload);
+
+        const response: ISignInResponse<typeof user> = {
+            token,
+            userData: user
+        }
+
+        return response;
     }
 }
