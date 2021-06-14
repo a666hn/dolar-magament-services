@@ -8,10 +8,11 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export interface IResponseHttp<T> {
-    code: number;
+    status: number;
     method: string;
-    errorMessage?: string;
-    data: T;
+    message: string;
+    code?: number;
+    data?: T;
 }
 
 @Injectable()
@@ -26,10 +27,14 @@ export class TransformResponseInterceptors<T>
             map((data) => {
                 const http = ctx.switchToHttp();
                 const method = http.getRequest().method;
-                const code = http.getResponse().statusCode;
-                const errorMessage = '';
+                const status = http.getResponse().statusCode;
 
-                return { code, method, errorMessage, data };
+                return {
+                    status,
+                    method,
+                    message: data?.message,
+                    data: data?.data,
+                };
             }),
         );
     }

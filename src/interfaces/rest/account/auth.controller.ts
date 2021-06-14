@@ -38,9 +38,12 @@ export class AuthController {
         const [user, userProfile] = await this.aUsecase.RegisterUser(uDto);
 
         return this.authTransform.transformResponseRegisterUser(
-            user,
-            userProfile,
-        ).data;
+            'Registration success!',
+            {
+                user,
+                profile: userProfile,
+            },
+        );
     }
 
     @HttpCode(200)

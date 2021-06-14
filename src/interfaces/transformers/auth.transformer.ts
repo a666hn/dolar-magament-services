@@ -6,35 +6,41 @@ import {
     UserInterface,
 } from '../interface/auth.interface';
 
+interface RequestDataTransformResponseRegistration {
+    user?: UsersEntity;
+    profile?: UsersProfileEntity;
+}
+
 export class AuthTransformers {
     transformResponseRegisterUser(
-        user?: UsersEntity,
-        profile?: UsersProfileEntity,
+        completedMessage: string,
+        data: RequestDataTransformResponseRegistration,
     ): DataResponse<UserInterface> {
         const userData: UserInterface = {
-            uid: user?.id,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-            email: user?.email,
-            username: user?.username,
-            status: user?.status,
-            isEmailVerified: user?.isEmailVerified,
+            uid: data?.user?.id,
+            firstName: data?.user?.firstName,
+            lastName: data?.user?.lastName,
+            email: data?.user?.email,
+            username: data?.user?.username,
+            status: data?.user?.status,
+            isEmailVerified: data?.user?.isEmailVerified,
             profile: {
-                profileId: profile?.id,
-                avatar: profile?.avatar,
-                backgroundProfile: profile?.background,
-                accountStatus: profile?.accountStatus,
-                bio: profile?.bio,
-                socialMedia: profile?.socialMedia,
-                address: profile?.address,
-                version: profile?.version,
+                profileId: data?.profile?.id,
+                avatar: data?.profile?.avatar,
+                backgroundProfile: data?.profile?.background,
+                accountStatus: data?.profile?.accountStatus,
+                bio: data?.profile?.bio,
+                socialMedia: data?.profile?.socialMedia,
+                address: data?.profile?.address,
+                version: data?.profile?.version,
             },
-            createdAt: user?.createdAt,
-            updatedAt: user?.updatedAt,
-            version: user?.version,
+            createdAt: data?.user?.createdAt,
+            updatedAt: data?.user?.updatedAt,
+            version: data?.user?.version,
         };
 
         return {
+            message: completedMessage,
             data: userData,
         };
     }
