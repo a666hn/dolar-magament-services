@@ -8,7 +8,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/databases/entities/users.entity';
 import { UsersProfileEntity } from 'src/databases/entities/users_profile.entity';
 import { AuthRepository } from 'src/databases/repositories/account/auth.repository';
+import { UsersUseCase } from 'src/databases/usecases/users.usecase';
 import {
+    UserProfileDto,
     UserRegistrationDto,
     UserSignInDto,
 } from 'src/interfaces/dto/account/users.dto';
@@ -24,13 +26,18 @@ export class AuthUsecase {
         @InjectRepository(AuthRepository)
         private authRepository: AuthRepository,
         private jwtService: JwtService,
+        private userUseCase: UsersUseCase,
     ) {}
 
     async RegisterUser(
-        uDto: UserRegistrationDto,
+        // uDto: UserRegistrationDto,
+        userProfileDto: UserProfileDto,
     ): Promise<[UsersEntity, UsersProfileEntity]> {
-        const user = await this.authRepository.RegistrationUser(uDto);
-        const userProfile = await this.authRepository.GetProfileUser(user.id);
+        // const user = await this.authRepository.RegistrationUser(uDto);
+        // const userProfile = await this.authRepository.GetProfileUser(user.id);
+
+        const [user, userProfile] =
+            await this.userUseCase.RegisterNewUserWithProfile(userProfileDto);
 
         return [user, userProfile];
     }

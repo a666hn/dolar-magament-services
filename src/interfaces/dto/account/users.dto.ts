@@ -15,6 +15,16 @@ export class UserRegistrationDto {
     password: string;
 }
 
+export class UserProfileDto extends UserRegistrationDto {
+    @IsOptional()
+    @IsString()
+    bio: string;
+
+    @IsOptional()
+    @IsString()
+    address: string;
+}
+
 export class UserSignInDto {
     @IsNotEmpty({ message: 'Email is Required' })
     @IsString()

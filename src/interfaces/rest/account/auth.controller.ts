@@ -15,6 +15,7 @@ import {
     VERSION_1,
 } from 'src/globals/dictionary/url.dictionary';
 import {
+    UserProfileDto,
     UserRegistrationDto,
     UserSignInDto,
 } from 'src/interfaces/dto/account/users.dto';
@@ -34,8 +35,10 @@ export class AuthController {
 
     @Post(AUTH_REGISTRATION)
     @UseInterceptors(ClassSerializerInterceptor)
-    async RegisterUser(@Body() uDto: UserRegistrationDto) {
-        const [user, userProfile] = await this.aUsecase.RegisterUser(uDto);
+    async RegisterUser(@Body() userProfileDto: UserProfileDto) {
+        const [user, userProfile] = await this.aUsecase.RegisterUser(
+            userProfileDto,
+        );
 
         return this.authTransform.transformResponseRegisterUser(
             'Registration success!',
