@@ -1,4 +1,4 @@
-import { TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
@@ -15,6 +15,8 @@ export class DbConnectionConfigurationClass {
         synchronize: true,
         autoLoadEntities: true,
         uuidExtension: 'uuid-ossp',
-        entities: [path.join(__dirname, "..", "entities", "**/*.entity{.ts, .js}")]
-    }
+        entities: [
+            path.join(__dirname, '..', 'entities', '**/*.entity{.ts, .js}'),
+        ],
+    };
 }

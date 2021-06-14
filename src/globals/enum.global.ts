@@ -3,7 +3,7 @@ export enum EUsersStatus {
     INACTIVE = 'INACTIVE',
     WAITING_APPROVAL = 'WAITING_APPROVAL',
     REGISTERED = 'REGISTERED',
-    SUSPEND = 'SUSSPEND'
+    SUSPEND = 'SUSSPEND',
 }
 
 export enum PostgressCodeError {
@@ -11,5 +11,5 @@ export enum PostgressCodeError {
     FOREIGN_KEY_VIOLATION = '23503',
     NULL_VALUE_NOT_ALLOWED = '22004',
     NOT_NULL_VIOLATION = '23502',
-    UNIQUE_VIOLATION = '23505'
+    UNIQUE_VIOLATION = '23505',
 }

@@ -9,7 +9,7 @@ import { AppController } from './app.controller';
 
 dotenv.config();
 
-let mode: string = process.env.NODE_ENV;
+const mode: string = process.env.NODE_ENV;
 let connection: any;
 
 const dbConnection = new DbConnectionConfigurationClass();
@@ -25,9 +25,9 @@ if (mode === 'development') {
         TypeOrmModule.forRoot(connection),
         CoreModule,
 
-        ...AccountAPP
+        ...AccountAPP,
     ],
     controllers: [AppController],
-    providers: []
+    providers: [],
 })
 export class AppModule {}

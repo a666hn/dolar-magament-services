@@ -1,33 +1,45 @@
-import { Body, ClassSerializerInterceptor, Controller, Get, HttpCode, Post, UseGuards, UseInterceptors } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import { GetAuthenticatedUser } from "src/core/decorator/user.decorator";
-import { UsersEntity } from "src/databases/entities/users.entity";
-import { UserRegistrationDto, UserSignInDto } from "src/interfaces/dto/account/users.dto";
-import { IAuthenticatedUserPayload, ISignInResponse } from "src/interfaces/interface/auth.interface";
-import { AuthUsecase } from "src/interfaces/usecases/account/auth.usecase";
+import {
+    Body,
+    ClassSerializerInterceptor,
+    Controller,
+    HttpCode,
+    Post,
+    UseInterceptors,
+} from '@nestjs/common';
+import { UsersEntity } from 'src/databases/entities/users.entity';
+import {
+    ACCOUNT_BASE_URL,
+    AUTH_BASE_URL,
+    AUTH_REGISTRATION,
+    AUTH_SIGNIN,
+    VERSION_1,
+} from 'src/globals/dictionary/url.dictionary';
+import {
+    UserRegistrationDto,
+    UserSignInDto,
+} from 'src/interfaces/dto/account/users.dto';
+import {
+    IAuthenticatedUserPayload,
+    ISignInResponse,
+} from 'src/interfaces/interface/auth.interface';
+import { AuthUsecase } from 'src/interfaces/usecases/account/auth.usecase';
 
-@Controller('authentication')
+@Controller(`${VERSION_1}/${ACCOUNT_BASE_URL}/${AUTH_BASE_URL}`)
 export class AuthController {
     constructor(private aUsecase: AuthUsecase) {}
 
-    @Post('registration')
+    @Post(AUTH_REGISTRATION)
     @UseInterceptors(ClassSerializerInterceptor)
     RegisterUser(@Body() uDto: UserRegistrationDto): Promise<UsersEntity> {
         return this.aUsecase.RegisterUser(uDto);
     }
 
     @HttpCode(200)
-    @Post('signin')
+    @Post(AUTH_SIGNIN)
     @UseInterceptors(ClassSerializerInterceptor)
-    UserSignIn(@Body() userSignInDto: UserSignInDto): Promise<ISignInResponse<IAuthenticatedUserPayload>> {
+    UserSignIn(
+        @Body() userSignInDto: UserSignInDto,
+    ): Promise<ISignInResponse<IAuthenticatedUserPayload>> {
         return this.aUsecase.UserSignIn(userSignInDto);
-    }
-
-    @Get('/test')
-    @UseGuards(AuthGuard())
-    Test(
-        @GetAuthenticatedUser() user: IAuthenticatedUserPayload
-    ) {
-        return user;
     }
 }

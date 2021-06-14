@@ -1,5 +1,5 @@
-import { IsNotEmpty, IsString } from "class-validator";
-import { Name } from "src/databases/entities/embeded/name.embeded";
+import { IsNotEmpty, IsString } from 'class-validator';
+import { Name } from 'src/databases/entities/embeded/name.embeded';
 
 export class UserRegistrationDto {
     @IsNotEmpty()

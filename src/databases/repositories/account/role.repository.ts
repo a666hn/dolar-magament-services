@@ -1,14 +1,14 @@
-import { RolesEntity } from "src/databases/entities/roles.entity";
-import { UsersEntity } from "src/databases/entities/users.entity";
-import { AddRoleDto, FilterRoleDto } from "src/interfaces/dto/account/role.dto";
-import { HandlePostgressError } from "src/utils/postgress-handle-error";
-import { EntityRepository, Repository } from "typeorm";
+import { RolesEntity } from 'src/databases/entities/roles.entity';
+import { UsersEntity } from 'src/databases/entities/users.entity';
+import { AddRoleDto, FilterRoleDto } from 'src/interfaces/dto/account/role.dto';
+import { HandlePostgressError } from 'src/utils/postgress-handle-error';
+import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(RolesEntity)
 export class RoleRepository extends Repository<RolesEntity> {
     async AddNewRole(role: AddRoleDto, userId: string): Promise<RolesEntity> {
         const { roleName, description } = role;
-        const _role = this.create({ roleName, description, createdBy: userId })
+        const _role = this.create({ roleName, description, createdBy: userId });
 
         try {
             await this.save(_role);
@@ -19,7 +19,11 @@ export class RoleRepository extends Repository<RolesEntity> {
         }
     }
 
-    async UpdateRole(role: RolesEntity, description: string, userId: string): Promise<RolesEntity> {
+    async UpdateRole(
+        role: RolesEntity,
+        description: string,
+        userId: string,
+    ): Promise<RolesEntity> {
         role.description = description;
         role.updatedBy = userId;
 
@@ -32,7 +36,10 @@ export class RoleRepository extends Repository<RolesEntity> {
         }
     }
 
-    async AssignRoleToUser(role: RolesEntity, user: UsersEntity): Promise<RolesEntity> {
+    async AssignRoleToUser(
+        role: RolesEntity,
+        user: UsersEntity,
+    ): Promise<RolesEntity> {
         role.users = [user];
 
         try {
@@ -48,7 +55,13 @@ export class RoleRepository extends Repository<RolesEntity> {
         const { id, name } = filterRoleDto;
         const query = this.createQueryBuilder('role');
 
-        query.select(['role.id', 'role.roleName', 'role.createdAt', 'role.updatedAt', 'role.version']);
+        query.select([
+            'role.id',
+            'role.roleName',
+            'role.createdAt',
+            'role.updatedAt',
+            'role.version',
+        ]);
 
         if (id) {
             query.andWhere('role.id = :id', { id });

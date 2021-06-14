@@ -1,8 +1,14 @@
-import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
-import { PostgressCodeError } from "src/globals/constant/enum.constant";
+import {
+    BadRequestException,
+    InternalServerErrorException,
+} from '@nestjs/common';
+import { PostgressCodeError } from 'src/globals/enum.global';
 
-export const HandlePostgressError = (code: PostgressCodeError, message: string) => {
-    switch(code) {
+export const HandlePostgressError = (
+    code: PostgressCodeError,
+    message: string,
+) => {
+    switch (code) {
         case PostgressCodeError.DEAD_LOCK_DETECTED:
             throw new InternalServerErrorException(message);
         case PostgressCodeError.FOREIGN_KEY_VIOLATION:
@@ -14,4 +20,4 @@ export const HandlePostgressError = (code: PostgressCodeError, message: string) 
             console.log(code, message);
             throw new InternalServerErrorException(message);
     }
-}
+};

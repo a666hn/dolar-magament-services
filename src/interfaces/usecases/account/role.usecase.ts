@@ -1,10 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { RolesEntity } from "src/databases/entities/roles.entity";
-import { AuthRepository } from "src/databases/repositories/account/auth.repository";
-import { RoleRepository } from "src/databases/repositories/account/role.repository";
-import { AddRoleDto, FilterRoleDto } from "src/interfaces/dto/account/role.dto";
-import { AuthUsecase } from "./auth.usecase";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RolesEntity } from 'src/databases/entities/roles.entity';
+import { AuthRepository } from 'src/databases/repositories/account/auth.repository';
+import { RoleRepository } from 'src/databases/repositories/account/role.repository';
+import { AddRoleDto, FilterRoleDto } from 'src/interfaces/dto/account/role.dto';
 
 @Injectable()
 export class RolesUseCase {
@@ -12,14 +11,21 @@ export class RolesUseCase {
         @InjectRepository(RoleRepository)
         private roleRepository: RoleRepository,
         @InjectRepository(AuthRepository)
-        private authRepository: AuthRepository
+        private authRepository: AuthRepository,
     ) {}
 
-    async RegisterRole(roleDto: AddRoleDto, userId: string): Promise<RolesEntity> {
+    async RegisterRole(
+        roleDto: AddRoleDto,
+        userId: string,
+    ): Promise<RolesEntity> {
         return this.roleRepository.AddNewRole(roleDto, userId);
     }
 
-    async UpdateRole(id: string, description: string, userId: string): Promise<RolesEntity> {
+    async UpdateRole(
+        id: string,
+        description: string,
+        userId: string,
+    ): Promise<RolesEntity> {
         const role = await this.roleRepository.findOne(id);
 
         if (!role) {
@@ -33,20 +39,23 @@ export class RolesUseCase {
         const role = await this.roleRepository.delete(id);
 
         if (role.affected < 1) {
-            throw new NotFoundException(`Cannot found role with id ${id}`)
+            throw new NotFoundException(`Cannot found role with id ${id}`);
         }
     }
 
-    async AssignRoleToUser(userId: string, roleId: string): Promise<RolesEntity> {
+    async AssignRoleToUser(
+        userId: string,
+        roleId: string,
+    ): Promise<RolesEntity> {
         const user = await this.authRepository.findOne(userId);
         const role = await this.roleRepository.findOne(roleId);
 
         if (!user) {
-            throw new NotFoundException(`Cannot found role with id ${userId}`)
+            throw new NotFoundException(`Cannot found role with id ${userId}`);
         }
 
         if (!role) {
-            throw new NotFoundException(`Cannot found role with id ${roleId}`)
+            throw new NotFoundException(`Cannot found role with id ${roleId}`);
         }
 
         return this.roleRepository.AssignRoleToUser(role, user);

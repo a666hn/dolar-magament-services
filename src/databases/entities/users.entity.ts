@@ -1,15 +1,23 @@
-import { Exclude } from "class-transformer";
-import { EUsersStatus } from "src/globals/constant/enum.constant";
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Name } from "./embeded/name.embeded";
-import { UsersProfileEntity } from "./users_profile.entity";
+import { Exclude } from 'class-transformer';
+import { EUsersStatus } from 'src/globals/enum.global';
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    JoinColumn,
+    OneToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Name } from './embeded/name.embeded';
+import { UsersProfileEntity } from './users_profile.entity';
 
 @Entity('users')
 export class UsersEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
-    
-    @Column(type => Name)
+
+    @Column(() => Name)
     name: Name;
 
     @Column({ unique: true, nullable: true })
@@ -27,7 +35,7 @@ export class UsersEntity {
 
     @Column({
         enum: EUsersStatus,
-        default: EUsersStatus.REGISTERED
+        default: EUsersStatus.REGISTERED,
     })
     status: EUsersStatus;
 
@@ -36,7 +44,7 @@ export class UsersEntity {
 
     @OneToOne(() => UsersProfileEntity, { nullable: true })
     @JoinColumn()
-    profile: UsersProfileEntity
+    profile: UsersProfileEntity;
 
     @Column()
     createdAt: Date;

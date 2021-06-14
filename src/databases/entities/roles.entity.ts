@@ -1,7 +1,15 @@
-import { Exclude } from "class-transformer";
-import { snakeCase, toUpper } from "lodash";
-import { BeforeInsert, BeforeUpdate, Column, Entity, JoinTable, ManyToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-import { UsersEntity } from "./users.entity";
+import { Exclude } from 'class-transformer';
+import { snakeCase, toUpper } from 'lodash';
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    JoinTable,
+    ManyToMany,
+    PrimaryColumn,
+} from 'typeorm';
+import { UsersEntity } from './users.entity';
 
 @Entity('roles')
 export class RolesEntity {
@@ -19,12 +27,12 @@ export class RolesEntity {
         name: 'roles_user',
         joinColumn: {
             name: 'roles',
-            referencedColumnName: 'id'
+            referencedColumnName: 'id',
         },
         inverseJoinColumn: {
             name: 'users',
-            referencedColumnName: 'id'
-        }
+            referencedColumnName: 'id',
+        },
     })
     @Exclude()
     users: UsersEntity[];

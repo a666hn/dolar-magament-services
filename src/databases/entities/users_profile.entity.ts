@@ -1,20 +1,26 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+    BeforeInsert,
+    BeforeUpdate,
+    Column,
+    Entity,
+    PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('users_profile')
 export class UsersProfileEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
-    
-    @Column("simple-json", { nullable: true })
-    avatar?: { url?: string, key?: string };
 
-    @Column("simple-json", { nullable: true })
-    background?: { url?: string, key?: string };
+    @Column('simple-json', { nullable: true })
+    avatar?: { url?: string; key?: string };
+
+    @Column('simple-json', { nullable: true })
+    background?: { url?: string; key?: string };
 
     @Column({ nullable: true })
     bio: string;
 
-    @Column("simple-array", { nullable: true })
+    @Column('simple-array', { nullable: true })
     socialMedia: string[];
 
     @Column({ nullable: true })

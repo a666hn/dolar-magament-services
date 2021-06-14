@@ -1,10 +1,10 @@
-import { UsersEntity } from "src/databases/entities/users.entity";
-import { UserRegistrationDto } from "src/interfaces/dto/account/users.dto";
-import { CreatePassword } from "src/utils/util";
-import { EntityRepository, Repository } from "typeorm";
+import { UsersEntity } from 'src/databases/entities/users.entity';
+import { UserRegistrationDto } from 'src/interfaces/dto/account/users.dto';
+import { CreatePassword } from 'src/utils/util';
+import { EntityRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { HandlePostgressError } from "src/utils/postgress-handle-error";
-import { IAuthenticatedUserPayload } from "src/interfaces/interface/auth.interface";
+import { HandlePostgressError } from 'src/utils/postgress-handle-error';
+import { IAuthenticatedUserPayload } from 'src/interfaces/interface/auth.interface';
 
 @EntityRepository(UsersEntity)
 export class AuthRepository extends Repository<UsersEntity> {
@@ -18,19 +18,25 @@ export class AuthRepository extends Repository<UsersEntity> {
 
             return user;
         } catch (err) {
-            HandlePostgressError(err.code, err.message)
+            HandlePostgressError(err.code, err.message);
         }
     }
 
-    async CheckUserSignIn(user: UsersEntity, password: string): Promise<[boolean, IAuthenticatedUserPayload]> {
+    async CheckUserSignIn(
+        user: UsersEntity,
+        password: string,
+    ): Promise<[boolean, IAuthenticatedUserPayload]> {
         const isMatch = await bcrypt.compare(password, user.password);
 
-        const userData: IAuthenticatedUserPayload = await this.GetAuthenticatedUser(user.id);
+        const userData: IAuthenticatedUserPayload =
+            await this.GetAuthenticatedUser(user.id);
 
         return [isMatch, userData];
     }
 
-    async GetAuthenticatedUser(uid: string): Promise<IAuthenticatedUserPayload> {
+    async GetAuthenticatedUser(
+        uid: string,
+    ): Promise<IAuthenticatedUserPayload> {
         const query = this.createQueryBuilder('u');
 
         query
@@ -45,7 +51,7 @@ export class AuthRepository extends Repository<UsersEntity> {
                 'u.email as email',
                 'u.isEmailVerified as isEmailVerified',
                 'u.phoneNumber as phoneNumber',
-                'r.id as role'
+                'r.id as role',
             ]);
 
         query.andWhere('u.id = :uid', { uid });
