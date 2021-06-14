@@ -29,11 +29,11 @@ export class RolesEntity {
     @JoinTable({
         name: 'map_role_user',
         joinColumn: {
-            name: 'roleId',
+            name: 'role_id',
             referencedColumnName: 'id',
         },
         inverseJoinColumn: {
-            name: 'userId',
+            name: 'user_id',
             referencedColumnName: 'id',
         },
     })
