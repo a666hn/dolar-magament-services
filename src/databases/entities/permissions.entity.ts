@@ -1,6 +1,8 @@
-import { Exclude } from 'class-transformer';
 import { snakeCase, toUpper } from 'lodash';
-import { ROLES_ENTITY } from 'src/globals/dictionary/entity.dictionary';
+import {
+    MAPPING_PERMISSIONS_TO_ROLE,
+    PERMISSIONS_ENTITY,
+} from 'src/globals/dictionary/entity.dictionary';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -8,42 +10,41 @@ import {
     Entity,
     JoinTable,
     ManyToMany,
-    OneToMany,
     PrimaryColumn,
 } from 'typeorm';
-import { PermissionsEntity } from './permissions.entity';
-import { UsersEntity } from './users.entity';
+import { RolesEntity } from './roles.entity';
 
-@Entity(ROLES_ENTITY)
-export class RolesEntity {
-    @PrimaryColumn()
+@Entity(PERMISSIONS_ENTITY)
+export class PermissionsEntity {
+    @PrimaryColumn({ unique: true })
     id: string;
 
-    @Column({ unique: true })
+    @Column({
+        nullable: false,
+    })
     name: string;
 
-    @Column({ nullable: true })
+    @Column()
     description: string;
 
-    @ManyToMany(() => UsersEntity)
+    @Column({
+        nullable: false,
+    })
+    scoped: string;
+
+    @ManyToMany(() => RolesEntity, { nullable: true })
     @JoinTable({
-        name: 'map_role_user',
+        name: MAPPING_PERMISSIONS_TO_ROLE,
         joinColumn: {
-            name: 'roleId',
+            name: 'permission_id',
             referencedColumnName: 'id',
         },
         inverseJoinColumn: {
-            name: 'userId',
+            name: 'role_id',
             referencedColumnName: 'id',
         },
     })
-    @Exclude()
-    users: UsersEntity[];
-
-    @OneToMany(() => PermissionsEntity, (permission) => permission.roles, {
-        nullable: true,
-    })
-    permissions: PermissionsEntity[];
+    roles: RolesEntity[];
 
     @Column({
         name: 'created_at',

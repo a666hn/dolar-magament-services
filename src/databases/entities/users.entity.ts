@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { EUsersStatus } from 'src/globals/global.enum';
+import { ACCOUNT_STATUS } from 'src/globals/global.enum';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -9,24 +9,41 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Name } from './embeded/name.embeded';
 import { UsersProfileEntity } from './users_profile.entity';
+import { USERS_ENTITY } from 'src/globals/dictionary/entity.dictionary';
+import * as bcrypt from 'bcrypt';
 
-@Entity('users')
+@Entity(USERS_ENTITY)
 export class UsersEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column(() => Name)
-    name: Name;
+    @Column({
+        nullable: false,
+        name: 'first_name',
+    })
+    firstName: string;
 
-    @Column({ unique: true, nullable: true })
+    @Column({
+        name: 'last_name',
+    })
+    lastName: string;
+
+    @Column({
+        unique: true,
+        nullable: true,
+    })
     username: string;
 
-    @Column({ unique: true })
+    @Column({
+        unique: true,
+    })
     email: string;
 
-    @Column({ nullable: true })
+    @Column({
+        name: 'phone_number',
+        nullable: true,
+    })
     phoneNumber: string;
 
     @Exclude()
@@ -34,36 +51,62 @@ export class UsersEntity {
     password: string;
 
     @Column({
-        enum: EUsersStatus,
-        default: EUsersStatus.REGISTERED,
+        enum: ACCOUNT_STATUS,
+        enumName: 'account_status_enum',
+        default: ACCOUNT_STATUS.REGISTERED,
     })
-    status: EUsersStatus;
+    status: ACCOUNT_STATUS;
 
-    @Column({ default: false })
+    @Column({
+        name: 'is_email_verified',
+        default: false,
+    })
     isEmailVerified: boolean;
 
-    @OneToOne(() => UsersProfileEntity, { nullable: true })
-    @JoinColumn()
+    @OneToOne(() => UsersProfileEntity, {
+        nullable: true,
+        createForeignKeyConstraints: true,
+    })
+    @JoinColumn({
+        name: 'profile_id',
+    })
     profile: UsersProfileEntity;
 
-    @Column()
+    @Column({
+        name: 'created_at',
+    })
     createdAt: Date;
 
-    @Column({ nullable: true })
+    @Column({
+        name: 'updated_at',
+        nullable: true,
+    })
     updatedAt: Date;
 
-    @Column({ nullable: true })
+    @Column({
+        name: 'created_by',
+        nullable: true,
+    })
     createdBy: string;
 
-    @Column({ nullable: true })
+    @Column({
+        name: 'updated_by',
+        nullable: true,
+    })
     updatedBy: string;
 
-    @Column({ default: 0 })
+    @Column({
+        default: 0,
+    })
     version: number;
 
     @BeforeInsert()
-    updateInsertedData() {
+    async updateInsertedData(password: string) {
         this.createdAt = new Date();
+
+        const SALT = await bcrypt.genSalt();
+
+        this.password = await bcrypt.hash(password || this.password, SALT);
     }
 
     @BeforeUpdate()

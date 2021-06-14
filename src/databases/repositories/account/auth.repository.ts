@@ -1,6 +1,6 @@
 import { UsersEntity } from 'src/databases/entities/users.entity';
 import { UserRegistrationDto } from 'src/interfaces/dto/account/users.dto';
-import { CreatePassword } from 'src/utils/util';
+// import { CreatePassword } from 'src/utils/util';
 import { EntityRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';
@@ -9,9 +9,9 @@ import { IAuthenticatedUserPayload } from 'src/interfaces/interface/auth.interfa
 @EntityRepository(UsersEntity)
 export class AuthRepository extends Repository<UsersEntity> {
     async userRegistration(uDto: UserRegistrationDto): Promise<UsersEntity> {
-        const { name, email, password } = uDto;
-        const p = await CreatePassword(password);
-        const user = this.create({ name, email, password: p });
+        const { firstName, lastName, email, password } = uDto;
+        // const p = await CreatePassword(password);
+        const user = this.create({ firstName, lastName, email, password });
 
         try {
             await this.save(user);
@@ -44,9 +44,9 @@ export class AuthRepository extends Repository<UsersEntity> {
             .leftJoinAndSelect('roles', 'r', 'r.id = ru.roles')
             .select([
                 'u.id as uid',
-                'u.nameFirst as firstname',
-                'u.nameLast as lastname',
-                `u.nameFirst || ' ' || u.nameLast as fullname`,
+                'u.first_name as firstname',
+                'u.last_name as lastname',
+                `u.first_name || ' ' || u.last_name as fullname`,
                 'u.username as username',
                 'u.email as email',
                 'u.isEmailVerified as isEmailVerified',

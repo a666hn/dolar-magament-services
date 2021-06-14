@@ -7,8 +7,8 @@ import { EntityRepository, Repository } from 'typeorm';
 @EntityRepository(RolesEntity)
 export class RoleRepository extends Repository<RolesEntity> {
     async AddNewRole(role: AddRoleDto, userId: string): Promise<RolesEntity> {
-        const { roleName, description } = role;
-        const _role = this.create({ roleName, description, createdBy: userId });
+        const { name, description } = role;
+        const _role = this.create({ name, description, createdBy: userId });
 
         try {
             await this.save(_role);

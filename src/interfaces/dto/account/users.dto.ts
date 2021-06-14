@@ -1,9 +1,12 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { Name } from 'src/databases/entities/embeded/name.embeded';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UserRegistrationDto {
     @IsNotEmpty()
-    name: Name;
+    firstName: string;
+
+    @IsOptional()
+    @IsString()
+    lastName: string;
 
     @IsNotEmpty()
     email: string;

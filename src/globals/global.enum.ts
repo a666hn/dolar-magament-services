@@ -1,9 +1,13 @@
-export enum EUsersStatus {
+export enum ACCOUNT_STATUS {
     ACTIVE = 'ACTIVE',
     INACTIVE = 'INACTIVE',
-    WAITING_APPROVAL = 'WAITING_APPROVAL',
     REGISTERED = 'REGISTERED',
     SUSPEND = 'SUSSPEND',
+}
+
+export enum ACCOUNT_PROFILE_STATUS {
+    GUEST = 'Guest',
+    VERIFIED = 'Verified',
 }
 
 export enum PostgressCodeError {

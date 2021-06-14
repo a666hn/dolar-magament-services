@@ -3,7 +3,7 @@ import { IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 export class AddRoleDto {
     @IsNotEmpty()
     @IsString()
-    roleName: string;
+    name: string;
 
     @IsOptional()
     @IsString()
