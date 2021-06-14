@@ -6,6 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/databases/entities/users.entity';
+import { UsersProfileEntity } from 'src/databases/entities/users_profile.entity';
 import { AuthRepository } from 'src/databases/repositories/account/auth.repository';
 import {
     UserRegistrationDto,
@@ -25,8 +26,13 @@ export class AuthUsecase {
         private jwtService: JwtService,
     ) {}
 
-    async RegisterUser(uDto: UserRegistrationDto): Promise<UsersEntity> {
-        return this.authRepository.userRegistration(uDto);
+    async RegisterUser(
+        uDto: UserRegistrationDto,
+    ): Promise<[UsersEntity, UsersProfileEntity]> {
+        const user = await this.authRepository.RegistrationUser(uDto);
+        const userProfile = await this.authRepository.GetProfileUser(user.id);
+
+        return [user, userProfile];
     }
 
     async UserSignIn(

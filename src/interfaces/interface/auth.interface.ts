@@ -41,9 +41,7 @@ export interface UserInterface {
     phoneNumber?: string | null;
     status: string;
     isEmailVerified: boolean;
-    profile: UserProfileInterface;
-    userRole?: string | null;
-    permissions?: string[] | [];
+    profile?: UserProfileInterface | null;
     createdAt?: Date | string | null;
     updatedAt?: Date | string | null;
     version?: number | null;
@@ -58,4 +56,21 @@ export interface UserProfileInterface {
     socialMedia?: string[] | [];
     address?: string | null;
     version?: number | null;
+}
+
+export interface AuthenticatedUserData {
+    uid: string;
+    email: string;
+    username?: string | null | '';
+    isEmailVerified: boolean;
+    status: string;
+    role?: string | null | '';
+    permissions?: string[] | [];
+}
+
+export interface AuthenticatedUserResponse {
+    token?: string | '';
+    refreshToken?: string | '';
+    role?: string | '';
+    permissions?: string[] | [];
 }

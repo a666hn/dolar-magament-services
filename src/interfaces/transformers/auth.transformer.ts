@@ -1,14 +1,15 @@
 import { UsersEntity } from 'src/databases/entities/users.entity';
 import { UsersProfileEntity } from 'src/databases/entities/users_profile.entity';
 import { DataResponse } from 'src/globals/global.interface';
-import { UserInterface } from '../interface/auth.interface';
+import {
+    AuthenticatedUserResponse,
+    UserInterface,
+} from '../interface/auth.interface';
 
 export class AuthTransformers {
     transformResponseRegisterUser(
         user?: UsersEntity,
         profile?: UsersProfileEntity,
-        role?: string | 'Unknown',
-        permissions?: string[],
     ): DataResponse<UserInterface> {
         const userData: UserInterface = {
             uid: user?.id,
@@ -28,8 +29,6 @@ export class AuthTransformers {
                 address: profile?.address,
                 version: profile?.version,
             },
-            userRole: role,
-            permissions: permissions,
             createdAt: user?.createdAt,
             updatedAt: user?.updatedAt,
             version: user?.version,
@@ -37,6 +36,21 @@ export class AuthTransformers {
 
         return {
             data: userData,
+        };
+    }
+
+    transformResponseLoginUser(
+        data: AuthenticatedUserResponse,
+    ): DataResponse<AuthenticatedUserResponse> {
+        const userPayload: AuthenticatedUserResponse = {
+            token: data?.token,
+            refreshToken: data?.refreshToken,
+            role: data?.role,
+            permissions: data?.permissions,
+        };
+
+        return {
+            data: userPayload,
         };
     }
 }

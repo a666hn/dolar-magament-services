@@ -6,7 +6,7 @@ import {
     Post,
     UseInterceptors,
 } from '@nestjs/common';
-import { UsersEntity } from 'src/databases/entities/users.entity';
+// import { UsersEntity } from 'src/databases/entities/users.entity';
 import {
     ACCOUNT_BASE_URL,
     AUTH_BASE_URL,
@@ -22,16 +22,25 @@ import {
     IAuthenticatedUserPayload,
     ISignInResponse,
 } from 'src/interfaces/interface/auth.interface';
+import { AuthTransformers } from 'src/interfaces/transformers/auth.transformer';
 import { AuthUsecase } from 'src/interfaces/usecases/account/auth.usecase';
 
 @Controller(`${VERSION_1}/${ACCOUNT_BASE_URL}/${AUTH_BASE_URL}`)
 export class AuthController {
-    constructor(private aUsecase: AuthUsecase) {}
+    constructor(
+        private aUsecase: AuthUsecase,
+        private authTransform: AuthTransformers,
+    ) {}
 
     @Post(AUTH_REGISTRATION)
     @UseInterceptors(ClassSerializerInterceptor)
-    RegisterUser(@Body() uDto: UserRegistrationDto): Promise<UsersEntity> {
-        return this.aUsecase.RegisterUser(uDto);
+    async RegisterUser(@Body() uDto: UserRegistrationDto) {
+        const [user, userProfile] = await this.aUsecase.RegisterUser(uDto);
+
+        return this.authTransform.transformResponseRegisterUser(
+            user,
+            userProfile,
+        ).data;
     }
 
     @HttpCode(200)

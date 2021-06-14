@@ -1,16 +1,16 @@
 import { UsersEntity } from 'src/databases/entities/users.entity';
 import { UserRegistrationDto } from 'src/interfaces/dto/account/users.dto';
-// import { CreatePassword } from 'src/utils/util';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityRepository, getRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';
 import { IAuthenticatedUserPayload } from 'src/interfaces/interface/auth.interface';
+import { UsersProfileEntity } from 'src/databases/entities/users_profile.entity';
+import { BadRequestException } from '@nestjs/common';
 
 @EntityRepository(UsersEntity)
 export class AuthRepository extends Repository<UsersEntity> {
-    async userRegistration(uDto: UserRegistrationDto): Promise<UsersEntity> {
+    async RegistrationUser(uDto: UserRegistrationDto): Promise<UsersEntity> {
         const { firstName, lastName, email, password } = uDto;
-        // const p = await CreatePassword(password);
         const user = this.create({ firstName, lastName, email, password });
 
         try {
@@ -20,6 +20,19 @@ export class AuthRepository extends Repository<UsersEntity> {
         } catch (err) {
             HandlePostgressError(err.code, err.message);
         }
+    }
+
+    async GetProfileUser(userId: string): Promise<UsersProfileEntity> {
+        if (!userId) {
+            throw new BadRequestException(
+                'Please provide the user id for get user profile',
+            );
+        }
+
+        return getRepository(UsersProfileEntity)
+            .createQueryBuilder('up')
+            .where('up.user_id = :userId', { userId })
+            .getOne();
     }
 
     async CheckUserSignIn(
