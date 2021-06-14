@@ -4,6 +4,7 @@ import { CreatePassword } from "src/utils/util";
 import { EntityRepository, Repository } from "typeorm";
 import * as bcrypt from 'bcrypt';
 import { HandlePostgressError } from "src/utils/postgress-handle-error";
+import { IAuthenticatedUserPayload } from "src/interfaces/interface/auth.interface";
 
 @EntityRepository(UsersEntity)
 export class AuthRepository extends Repository<UsersEntity> {
@@ -25,5 +26,28 @@ export class AuthRepository extends Repository<UsersEntity> {
         const isMatch = await bcrypt.compare(password, user.password);
 
         return [isMatch, user];
+    }
+
+    async GetAuthenticatedUser(uid: string): Promise<IAuthenticatedUserPayload> {
+        const query = this.createQueryBuilder('u');
+
+        query
+            .leftJoinAndSelect('roles_user', 'ru', 'ru.users = u.id')
+            .leftJoinAndSelect('roles', 'r', 'r.id = ru.roles')
+            .select([
+                'u.id as uid',
+                'u.nameFirst as firstname',
+                'u.nameLast as lastname',
+                `u.nameFirst || ' ' || u.nameLast as fullname`,
+                'u.username as username',
+                'u.email as email',
+                'u.isEmailVerified as isEmailVerified',
+                'u.phoneNumber as phoneNumber',
+                'r.id as role'
+            ]);
+
+        query.andWhere('u.id = :uid', { uid });
+
+        return query.getRawOne();
     }
 }
