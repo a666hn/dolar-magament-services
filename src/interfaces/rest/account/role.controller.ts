@@ -1,19 +1,19 @@
-import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
-import { GetAuthenticatedUser } from "src/core/decorator/user.decorator";
-import { RolesEntity } from "src/databases/entities/roles.entity";
-import { AddRoleDto, FilterRoleDto } from "src/interfaces/dto/account/role.dto";
-import { RolesUseCase } from "src/interfaces/usecases/account/role.usecase";
+import { Body, ClassSerializerInterceptor, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards, UseInterceptors } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { GetAuthenticatedUser } from 'src/core/decorator/user.decorator';
+import { RolesEntity } from 'src/databases/entities/roles.entity';
+import { AddRoleDto, FilterRoleDto } from 'src/interfaces/dto/account/role.dto';
+import { RolesUseCase } from 'src/interfaces/usecases/account/role.usecase';
 
 @Controller('role')
 export class RoleController {
-    constructor(private roleUsecase: RolesUseCase) {}
+    constructor(private roleUsecase: RolesUseCase) { }
 
     @Post()
     @UseGuards(AuthGuard())
     RegisterRole(
         @Body() roleDto: AddRoleDto,
-        @GetAuthenticatedUser('id') userId: string
+        @GetAuthenticatedUser('uid') userId: string,
     ): Promise<RolesEntity> {
         return this.roleUsecase.RegisterRole(roleDto, userId);
     }
@@ -23,7 +23,7 @@ export class RoleController {
     UpdateRole(
         @Param('id') id: string,
         @Body('description') description: string,
-        @GetAuthenticatedUser('id') userId: string
+        @GetAuthenticatedUser('uid') userId: string,
     ): Promise<RolesEntity> {
         return this.roleUsecase.UpdateRole(id, description, userId);
     }
@@ -39,7 +39,7 @@ export class RoleController {
     @UseInterceptors(ClassSerializerInterceptor)
     AssignRoleToUser(
         @Body('userId') userId: string,
-        @Body('roleId') roleId: string
+        @Body('roleId') roleId: string,
     ): Promise<RolesEntity> {
         return this.roleUsecase.AssignRoleToUser(userId, roleId);
     }
