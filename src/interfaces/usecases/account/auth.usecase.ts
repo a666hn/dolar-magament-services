@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UsersEntity } from "src/databases/entities/users.entity";
 import { AuthRepository } from "src/databases/repositories/account/auth.repository";
 import { UserRegistrationDto, UserSignInDto } from "src/interfaces/dto/account/users.dto";
-import { IPayloadJwt, ISignInResponse } from "src/interfaces/interface/auth.interface";
+import { IAuthenticatedUserPayload, IPayloadJwt, ISignInResponse } from "src/interfaces/interface/auth.interface";
 
 @Injectable()
 export class AuthUsecase {
@@ -12,13 +12,13 @@ export class AuthUsecase {
         @InjectRepository(AuthRepository)
         private authRepository: AuthRepository,
         private jwtService: JwtService
-    ) {}
+    ) { }
 
     async RegisterUser(uDto: UserRegistrationDto): Promise<UsersEntity> {
         return this.authRepository.userRegistration(uDto);
     }
 
-    async UserSignIn(userSignInDto: UserSignInDto): Promise<ISignInResponse<UsersEntity>> {
+    async UserSignIn(userSignInDto: UserSignInDto): Promise<ISignInResponse<IAuthenticatedUserPayload>> {
         const { email, password } = userSignInDto
         const user: UsersEntity = await this.authRepository.findOne({ where: { email } });
 
@@ -26,7 +26,7 @@ export class AuthUsecase {
             throw new NotFoundException(`User with email ${email} is not exist, or maybe has been inactive`)
         }
 
-        const isMatch = await this.authRepository.UserSignIn(user, password);
+        const [isMatch, userData] = await this.authRepository.CheckUserSignIn(user, password);
 
         if (!isMatch) {
             throw new BadRequestException('Password not match')
@@ -41,9 +41,9 @@ export class AuthUsecase {
 
         const token: string = this.jwtService.sign(payload);
 
-        const response: ISignInResponse<typeof user> = {
+        const response: ISignInResponse<IAuthenticatedUserPayload> = {
             token,
-            userData: user
+            userData
         }
 
         return response;

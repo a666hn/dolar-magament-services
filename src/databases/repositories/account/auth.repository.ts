@@ -22,10 +22,12 @@ export class AuthRepository extends Repository<UsersEntity> {
         }
     }
 
-    async UserSignIn(user: UsersEntity, password: string): Promise<[boolean, UsersEntity]> {
+    async CheckUserSignIn(user: UsersEntity, password: string): Promise<[boolean, IAuthenticatedUserPayload]> {
         const isMatch = await bcrypt.compare(password, user.password);
 
-        return [isMatch, user];
+        const userData: IAuthenticatedUserPayload = await this.GetAuthenticatedUser(user.id);
+
+        return [isMatch, userData];
     }
 
     async GetAuthenticatedUser(uid: string): Promise<IAuthenticatedUserPayload> {

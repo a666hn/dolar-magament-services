@@ -19,7 +19,7 @@ export class AuthController {
     @HttpCode(200)
     @Post('signin')
     @UseInterceptors(ClassSerializerInterceptor)
-    UserSignIn(@Body() userSignInDto: UserSignInDto): Promise<ISignInResponse<UsersEntity>> {
+    UserSignIn(@Body() userSignInDto: UserSignInDto): Promise<ISignInResponse<IAuthenticatedUserPayload>> {
         return this.aUsecase.UserSignIn(userSignInDto);
     }
 
