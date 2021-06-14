@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { EUsersStatus } from 'src/globals/enum.global';
+import { EUsersStatus } from 'src/globals/global.enum';
 import {
     BeforeInsert,
     BeforeUpdate,

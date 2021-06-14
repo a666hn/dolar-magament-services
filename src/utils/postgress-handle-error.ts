@@ -2,7 +2,7 @@ import {
     BadRequestException,
     InternalServerErrorException,
 } from '@nestjs/common';
-import { PostgressCodeError } from 'src/globals/enum.global';
+import { PostgressCodeError } from 'src/globals/global.enum';
 
 export const HandlePostgressError = (
     code: PostgressCodeError,
