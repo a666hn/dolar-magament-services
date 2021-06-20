@@ -11,7 +11,6 @@ export interface IResponseHttp<T> {
     status: number;
     method: string;
     message: string;
-    code?: number;
     data?: T;
 }
 

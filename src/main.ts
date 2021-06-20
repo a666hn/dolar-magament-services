@@ -5,10 +5,7 @@ import { Run } from './run-console';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'aws-sdk';
-import {
-    BASE_SERVICE,
-    DOLLAR_MANAGEMENT_APP,
-} from './globals/dictionary/url.dictionary';
+import { APP_NAME, SERVICE } from './dictionaries/constant.dictionary';
 
 dotenv.config();
 
@@ -17,7 +14,7 @@ async function bootstrap() {
     const { APP_PORT } = process.env;
 
     app.useGlobalPipes(new ValidationPipe());
-    app.setGlobalPrefix(`${DOLLAR_MANAGEMENT_APP}/${BASE_SERVICE}`);
+    app.setGlobalPrefix(`${APP_NAME}/${SERVICE}`);
 
     const configService = app.get(ConfigService);
     config.update({

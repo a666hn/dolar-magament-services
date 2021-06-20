@@ -20,9 +20,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
         const payload: IResponseHttp<null> = {
             status,
-            code: status,
             method: request.method,
             message: message,
+            data: null,
         };
 
         response.status(status).json(payload);
