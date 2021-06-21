@@ -1,5 +1,4 @@
 import { USER_ENTITY } from 'src/dictionaries/constant.dictionary';
-import { ACCOUNT_STATUS } from 'src/globals/global.enum';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -38,15 +37,6 @@ export class UsersEntity extends BaseEntity {
         nullable: false,
     })
     password: string;
-
-    @Column({
-        nullable: false,
-        enum: ACCOUNT_STATUS,
-        default: ACCOUNT_STATUS.REGISTERED,
-        enumName: 'account_status_enum',
-        name: 'account_status',
-    })
-    status: string;
 
     @Column({
         nullable: true,

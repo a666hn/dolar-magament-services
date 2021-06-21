@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AccountRepository } from 'src/applications/repositories/users.repository';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entities';
 import { UserProfiles } from 'src/infrastructures/database/postgres/entities/user_profiles.entity';
 import { CreateAccountDto } from 'src/interfaces/rests/admin/account/dto/account.dto';
@@ -9,11 +7,6 @@ import { getConnection } from 'typeorm';
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(AccountRepository)
-        private accountRepository: AccountRepository,
-    ) {}
-
     async RegisterUser(userDto: CreateAccountDto): Promise<UsersEntity> {
         const { email, firstName, lastName, password } = userDto;
         const name = lastName ? `${firstName.toUpperCase()} ${lastName.toUpperCase()}` : firstName.toUpperCase();
