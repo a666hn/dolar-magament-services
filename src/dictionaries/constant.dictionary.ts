@@ -21,3 +21,8 @@ export const USER_PROFILE_ENTITY = 'user_profiles';
 export const USER_META_ENTITY = 'user_meta';
 export const ROLE_ENTITY = 'roles';
 export const PERMISSION_ENTITY = 'permissions';
+
+// URL Variables!
+export const ACCOUNT_URL = 'account'
+export const ACCOUNT_SIGNUP_URL = 'signup'
+export const ACCOUNT_SIGNIN_URL = 'signin'

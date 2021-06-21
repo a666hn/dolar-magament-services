@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import { CoreModule } from './core/core.module';
 import { AppController } from './app.controller';
 import { PostgreeModule } from './infrastructures/database/postgree.module';
+import { AdminPanelModule } from './module.list';
 
 dotenv.config();
 
@@ -13,6 +14,8 @@ dotenv.config();
         ConfigModule.forRoot({ isGlobal: true }),
         PostgreeModule,
         CoreModule,
+
+        ...AdminPanelModule,
     ],
     controllers: [AppController],
     providers: [],

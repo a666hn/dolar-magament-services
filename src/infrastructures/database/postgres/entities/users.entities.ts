@@ -7,10 +7,13 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    JoinColumn,
+    OneToOne,
     UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 import * as bcrypt from 'bcrypt';
+import { UserProfiles } from './user_profiles.entity';
 
 @Entity(USER_ENTITY)
 export class UsersEntity extends BaseEntity {
@@ -41,8 +44,15 @@ export class UsersEntity extends BaseEntity {
         enum: ACCOUNT_STATUS,
         default: ACCOUNT_STATUS.REGISTERED,
         enumName: 'account_status_enum',
+        name: 'account_status',
     })
-    status: boolean;
+    status: string;
+
+    @Column({
+        nullable: true,
+        name: 'profile_id'
+    })
+    profileId: string;
 
     @CreateDateColumn({
         name: 'created_at',
@@ -64,6 +74,15 @@ export class UsersEntity extends BaseEntity {
         default: 0,
     })
     versions: number;
+
+    @OneToOne(() => UserProfiles, {
+        nullable: true,
+    })
+    @JoinColumn({
+        name: 'profile_id',
+        referencedColumnName: 'id',
+    })
+    profile: UserProfiles;
 
     @BeforeInsert()
     async updatePassword() {

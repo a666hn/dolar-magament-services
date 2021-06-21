@@ -9,3 +9,12 @@ export interface DataResponse<T> {
     message?: string | 'Success';
     data: T;
 }
+
+export interface ID {
+    id: string;
+}
+
+export interface Timestamps {
+    createdAt: Date;
+    updatedAt: Date;
+}
