@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AccountRepository } from 'src/applications/repositories/users.repository';
+import { UsersRepository } from 'src/applications/repositories/users.repository';
 import { UserProfilesRepository } from 'src/applications/repositories/user_profiles.repository';
 import { UserService } from 'src/applications/services/users.service';
 import { UserProfilesService } from 'src/applications/services/user_profiles.service';
@@ -12,7 +12,7 @@ import { AccountTransformers } from './account.transformer';
 @Module({
     imports: [
         TypeOrmModule.forFeature([
-            AccountRepository,
+            UsersRepository,
             UserProfilesRepository
         ]),
     ],

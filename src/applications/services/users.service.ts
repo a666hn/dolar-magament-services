@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entities';
+import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 import { UserProfilesEntity } from 'src/infrastructures/database/postgres/entities/user_profiles.entity';
 import { CreateAccountDto } from 'src/interfaces/rests/admin/account/dto/account.dto';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';

@@ -1,5 +1,5 @@
 import { DataResponse } from 'src/globals/global.interface';
-import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entities';
+import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 import { UserRegistrationDataResponse } from './interfaces/account.interface';
 
 export class AccountTransformers {

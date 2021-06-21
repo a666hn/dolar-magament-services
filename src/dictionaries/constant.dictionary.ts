@@ -25,3 +25,5 @@ export const PERMISSION_ENTITY = 'permissions';
 export const ACCOUNT_URL = 'account'
 export const ACCOUNT_SIGNUP_URL = 'signup'
 export const ACCOUNT_SIGNIN_URL = 'signin'
+
+export const PROFILE_URL = 'profile'
