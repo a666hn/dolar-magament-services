@@ -10,7 +10,7 @@ import {
 import { BaseEntity } from '../base.entity';
 
 @Entity(USER_PROFILE_ENTITY)
-export class UserProfiles extends BaseEntity {
+export class UserProfilesEntity extends BaseEntity {
     @Column({
         type: 'text',
         nullable: true,

@@ -2,8 +2,8 @@ export interface UserRegistrationDataResponse {
     id: string;
     name: string;
     username: string;
-    email: string;
     profile: UserProfileData;
+    meta: UserMeta;
 }
 
 interface Picture {
@@ -19,4 +19,10 @@ interface UserProfileData {
     backgroundProfile: Picture;
     phoneNumber: string;
     address: string;
+}
+
+interface UserMeta {
+    userEmail: string;
+    isEmailVerified: boolean;
+    status: string;
 }

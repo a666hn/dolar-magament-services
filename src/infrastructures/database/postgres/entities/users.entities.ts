@@ -12,7 +12,9 @@ import {
 } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 import * as bcrypt from 'bcrypt';
-import { UserProfiles } from './user_profiles.entity';
+import { UserProfilesEntity } from './user_profiles.entity';
+import { toUpper } from 'lodash';
+import { ACCOUNT_STATUS } from 'src/globals/global.enum';
 
 @Entity(USER_ENTITY)
 export class UsersEntity extends BaseEntity {
@@ -37,6 +39,21 @@ export class UsersEntity extends BaseEntity {
         nullable: false,
     })
     password: string;
+
+    @Column({
+        name: 'is_email_verified',
+        default: false,
+    })
+    isEmailVerified: boolean;
+
+    @Column({
+        nullable: false,
+        enum: ACCOUNT_STATUS,
+        default: ACCOUNT_STATUS.REGISTERED,
+        enumName: 'account_status_enum',
+        name: 'account_status',
+    })
+    accountStatus: string;
 
     @Column({
         nullable: true,
@@ -65,15 +82,20 @@ export class UsersEntity extends BaseEntity {
     })
     versions: number;
 
-    @OneToOne(() => UserProfiles, {
+    @OneToOne(() => UserProfilesEntity, {
         nullable: true,
     })
     @JoinColumn({
         name: 'profile_id',
         referencedColumnName: 'id',
     })
-    profile: UserProfiles;
+    profile: UserProfilesEntity;
 
+    @BeforeInsert()
+    updateFullName() {
+        this.name = toUpper(this.name);
+    }
+    
     @BeforeInsert()
     async updatePassword() {
         const SALT = await bcrypt.genSalt();

@@ -18,10 +18,8 @@ export const VERSION_3 = 'v3';
 // Entities Variable!
 export const USER_ENTITY = 'users';
 export const USER_PROFILE_ENTITY = 'user_profiles';
-export const USER_META_ENTITY = 'user_meta';
 export const ROLE_ENTITY = 'roles';
 export const PERMISSION_ENTITY = 'permissions';
-export const MAP_USER_USERMETA_ENTITY = '';
 
 // URL Variables!
 export const ACCOUNT_URL = 'account'
