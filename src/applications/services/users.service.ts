@@ -1,12 +1,20 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
-import { UserProfilesEntity } from 'src/infrastructures/database/postgres/entities/user_profiles.entity';
 import { CreateAccountDto } from 'src/interfaces/rests/admin/account/dto/account.dto';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';
 import { getConnection } from 'typeorm';
+import { UsersRepository } from '../repositories/users.repository';
+import { UserProfilesRepository } from '../repositories/user_profiles.repository';
 
 @Injectable()
 export class UserService {
+    constructor(
+        @InjectRepository(UsersRepository)
+        private readonly userRepository: UsersRepository,
+        @InjectRepository(UserProfilesRepository)
+        private readonly userProfileRepository: UserProfilesRepository,
+    ) {}
     async RegisterUser(userDto: CreateAccountDto): Promise<UsersEntity> {
         const connection = getConnection();
         const queryRunner = connection.createQueryRunner();
@@ -16,12 +24,8 @@ export class UserService {
         const { email, firstName, lastName, password } = userDto;
         const name = lastName ? `${firstName} ${lastName}` : firstName;
 
-        const user = queryRunner.manager.create(UsersEntity, {
-            name,
-            email,
-            password,
-        });
-        const userProfile = queryRunner.manager.create(UserProfilesEntity, user);
+        const userModel = this.userRepository.create({ name, email, password });
+        const userProfileModel = this.userProfileRepository.create(userModel);
 
         await queryRunner.startTransaction();
 
@@ -31,17 +35,16 @@ export class UserService {
             // Profile dulu baru nyimpen data user, kalo gak relasi nya
             // nanti gak masuk!!!
 
-            // Save user profile first
-            await queryRunner.manager.save(userProfile);
+            await this.userProfileRepository.save(userProfileModel);
 
-            // Then save user
-            user.profile = userProfile;
+            // Inject profile into user model
+            userModel.profile = userProfileModel;
 
-            await queryRunner.manager.save(user);
+            await this.userRepository.save(userModel);
 
             await queryRunner.commitTransaction();
 
-            return user;
+            return userModel;
         } catch (error) {
             queryRunner.rollbackTransaction();
             HandlePostgressError(error.code, error.message);

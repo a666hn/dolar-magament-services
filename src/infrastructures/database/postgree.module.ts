@@ -1,8 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HOST, NAME, PASSWORD, PORT, USERNAME } from 'src/dictionaries/constant.dictionary';
-import { RolesEntity } from './postgres/entities/roles.entity';
+import {
+    HOST,
+    NAME,
+    PASSWORD,
+    PORT,
+    USERNAME,
+} from 'src/dictionaries/constant.dictionary';
 
 @Module({
     imports: [
@@ -20,8 +25,6 @@ import { RolesEntity } from './postgres/entities/roles.entity';
                 uuidExtension: 'uuid-ossp',
             }),
         }),
-
-        TypeOrmModule.forFeature([RolesEntity]),
     ],
 })
 export class PostgreeModule {}

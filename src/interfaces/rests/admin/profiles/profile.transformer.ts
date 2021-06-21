@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { startCase, toLower } from "lodash";
-import { DataResponse } from "src/globals/global.interface";
-import { UsersEntity } from "src/infrastructures/database/postgres/entities/users.entity";
-import { ProfileResponse } from "./interfaces/profile.interface";
+import { Injectable } from '@nestjs/common';
+import { startCase, toLower } from 'lodash';
+import { DataResponse } from 'src/globals/global.interface';
+import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
+import { ProfileResponse } from './interfaces/profile.interface';
 
 @Injectable()
 export class ProfileTransformer {
@@ -24,8 +24,8 @@ export class ProfileTransformer {
                     status: user?.accountStatus,
                     isEmailVerified: user?.isEmailVerified,
                     phoneNumber: user?.profile?.phoneNumber,
-                }
+                },
             },
-        }
+        };
     }
 }

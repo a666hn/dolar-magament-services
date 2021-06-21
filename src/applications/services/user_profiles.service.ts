@@ -5,7 +5,10 @@ import { UsersRepository } from '../repositories/users.repository';
 
 @Injectable()
 export class UserProfilesService {
-    constructor(@InjectRepository(UsersRepository) private userRepository: UsersRepository) {}
+    constructor(
+        @InjectRepository(UsersRepository)
+        private userRepository: UsersRepository,
+    ) {}
 
     async GetProfileById(id: string): Promise<UsersEntity> {
         return this.userRepository.findOne({
