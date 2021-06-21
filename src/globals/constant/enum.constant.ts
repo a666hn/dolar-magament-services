@@ -1,7 +1,0 @@
-export enum EUsersStatus {
-    ACTIVE = 'ACTIVE',
-    INACTIVE = 'INACTIVE',
-    WAITING_APPROVAL = 'WAITING_APPROVAL',
-    REGISTERED = 'REGISTERED',
-    SUSPEND = 'SUSSPEND'
-}

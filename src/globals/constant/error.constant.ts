@@ -1,1 +1,0 @@
-export const ERROR_123 = '123';

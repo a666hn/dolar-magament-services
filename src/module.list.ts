@@ -1,10 +1,6 @@
-import { AuthHandler } from "./interfaces/handlers/account/auth/auth.handler";
-import { RoleHandler } from "./interfaces/handlers/account/role/role.handler";
+import { AccountModule } from "./interfaces/rests/admin/account/account.module";
 
-export const AccountAPP = [
-    // AUTH
-    AuthHandler,
 
-    // ROLE
-    RoleHandler
+export const AdminPanelModule = [
+    AccountModule,
 ]
