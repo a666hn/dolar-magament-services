@@ -22,8 +22,11 @@ export const ROLE_ENTITY = 'roles';
 export const PERMISSION_ENTITY = 'permissions';
 
 // URL Variables!
-export const ACCOUNT_URL = 'account'
-export const ACCOUNT_SIGNUP_URL = 'signup'
-export const ACCOUNT_SIGNIN_URL = 'signin'
+export const ACCOUNT_URL = 'account';
+export const ACCOUNT_SIGNUP_URL = 'signup';
+export const ACCOUNT_SIGNIN_URL = 'signin';
 
-export const PROFILE_URL = 'profile'
+export const PROFILE_URL = 'profile';
+
+export const ROLES_URL = 'role';
+export const ROLES_GET_ALL_URL = 'all';

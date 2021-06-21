@@ -2,15 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 import { UsersRepository } from '../repositories/users.repository';
-import { UserProfilesRepository } from '../repositories/user_profiles.repository';
 
 @Injectable()
 export class UserProfilesService {
-    constructor(
-        @InjectRepository(UsersRepository) private userRepository: UsersRepository,
-        @InjectRepository(UserProfilesRepository)
-        private userProfileRepositories: UserProfilesRepository,
-    ) {}
+    constructor(@InjectRepository(UsersRepository) private userRepository: UsersRepository) {}
 
     async GetProfileById(id: string): Promise<UsersEntity> {
         return this.userRepository.findOne({
@@ -18,7 +13,15 @@ export class UserProfilesService {
             where: {
                 id: id,
             },
-            select: ['id', 'name', 'username', 'email', 'accountStatus', 'isEmailVerified', 'profile'],
-        })
+            select: [
+                'id',
+                'name',
+                'username',
+                'email',
+                'accountStatus',
+                'isEmailVerified',
+                'profile',
+            ],
+        });
     }
 }

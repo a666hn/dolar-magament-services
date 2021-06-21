@@ -8,10 +8,7 @@ import { UserRegistrationDataResponse } from './interfaces/account.interface';
 
 @Controller(`/${VERSION_1}/${ACCOUNT_URL}`)
 export class AccountController {
-    constructor(
-        private userUsecase: UserUsecase,
-        private transform: AccountTransformers,
-    ) {}
+    constructor(private userUsecase: UserUsecase, private transform: AccountTransformers) {}
 
     @Post(ACCOUNT_SIGNUP_URL)
     @HttpCode(201)

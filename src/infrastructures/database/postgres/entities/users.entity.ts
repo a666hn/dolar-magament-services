@@ -57,7 +57,7 @@ export class UsersEntity extends BaseEntity {
 
     @Column({
         nullable: true,
-        name: 'profile_id'
+        name: 'profile_id',
     })
     profileId: string;
 
@@ -95,7 +95,7 @@ export class UsersEntity extends BaseEntity {
     updateFullName() {
         this.name = toUpper(this.name);
     }
-    
+
     @BeforeInsert()
     async updatePassword() {
         const SALT = await bcrypt.genSalt();
