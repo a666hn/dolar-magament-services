@@ -8,7 +8,7 @@ import { HandlePostgressError } from 'src/utils/postgress-handle-error';
 import { getConnection } from 'typeorm';
 
 @Injectable()
-export class AccountService {
+export class UserService {
     constructor(
         @InjectRepository(AccountRepository)
         private accountRepository: AccountRepository,
@@ -33,12 +33,15 @@ export class AccountService {
         await queryRunner.startTransaction();
 
         try {
-            await queryRunner.manager.save(user);
+            // Save profile duluan, soalnya relation id nya manggil
+            // profile id di user, makanya kita butuh buat menyimpan data
+            // Profile dulu baru nyimpen data user, kalo gak relasi nya
+            // nanti gak masuk!!!
             await queryRunner.manager.save(userProfile);
 
-            const profile = await queryRunner.manager.findOne(UserProfiles, userProfile.id);
+            user.profile = userProfile;
 
-            user.profile = profile;
+            await queryRunner.manager.save(user);
 
             await queryRunner.commitTransaction();
 
