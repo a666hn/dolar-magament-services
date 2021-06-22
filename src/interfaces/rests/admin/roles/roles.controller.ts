@@ -5,15 +5,20 @@ import {
     NotFoundException,
     Param,
     Post,
+    UseGuards,
 } from '@nestjs/common';
 import { RolesUsecase } from 'src/applications/usecases/domain/admin/roles.usecase';
 import {
+    RBAC_KEY_ID,
     ROLES_ASSIGN_USER_URL,
     ROLES_GET_ALL_URL,
     ROLES_URL,
     VERSION_1,
 } from 'src/dictionaries/constant.dictionary';
 import { DataResponse } from 'src/globals/global.interface';
+import { JWTGuard } from 'src/guards/jwt.guard';
+import { RBACGuard } from 'src/guards/rbac.guard';
+import { RequiredRBAC } from 'src/guards/rbac.metadata';
 import { RoleResponse } from './interface/roles.interface';
 import { RolesTransformers } from './roles.transformer';
 
@@ -35,6 +40,11 @@ export class RolesController {
         return this.roleTransformer.transformAllRoles(roles);
     }
 
+    @UseGuards(JWTGuard, RBACGuard)
+    @RequiredRBAC(
+        RBAC_KEY_ID.SYSTEM_ADMINISTRATOR_GUARD,
+        RBAC_KEY_ID.ADMINISTRATOR,
+    )
     @Post(`/${ROLES_ASSIGN_USER_URL}/:id`)
     async AssignRoleToUser(
         @Param('id') id: string,
@@ -43,5 +53,12 @@ export class RolesController {
         const msg = await this.roleUsecase.AssignRoleToUser(id, roleId);
 
         return this.roleTransformer.transformAssignRoleToUser(msg);
+    }
+
+    @UseGuards(JWTGuard, RBACGuard)
+    @RequiredRBAC(4)
+    @Get('/test')
+    GetTest(): void {
+        console.log('oke');
     }
 }

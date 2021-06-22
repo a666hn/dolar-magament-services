@@ -10,6 +10,15 @@ export const NAME = 'DATABASE_NAME_ACCOUNT';
 
 export const SERVICE = 'api';
 
+// Roles Key
+export const RBAC_METADATA_KEY = 'AUTH_BASE_RBAC';
+
+// RBAC
+export const RBAC_KEY_ID = {
+    SYSTEM_ADMINISTRATOR_GUARD: 1,
+    ADMINISTRATOR: 2,
+};
+
 // Version Variable!
 export const VERSION_1 = 'v1';
 export const VERSION_2 = 'v2';

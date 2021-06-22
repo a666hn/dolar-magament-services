@@ -18,3 +18,12 @@ export interface Timestamps {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface GetInformationOfAuthenticatedUserData {
+    id: string;
+    email: string;
+    username: string;
+    isEmailVerified: boolean;
+    status: string;
+    roles: number[];
+}

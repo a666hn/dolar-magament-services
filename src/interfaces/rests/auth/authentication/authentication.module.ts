@@ -1,28 +1,22 @@
-import { forwardRef, Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { UsersModule } from '../../admin/users/users.module';
+import { PassportModule } from '@nestjs/passport';
+import { TransformersGlobal } from 'src/globals/transformers.global';
+import { JWTAuthStrategy } from 'src/guards/strategy/jwt-auth.strategy';
 import { AuthenticationController } from './authentication.controller';
 import { AuthenticationTransformer } from './authentication.transformer';
+import { ImportAuthenticationModule } from './module.import';
 
 @Module({
-    imports: [
-        forwardRef(() => UsersModule),
-        JwtModule.registerAsync({
-            inject: [ConfigService],
-            useFactory: async (env: ConfigService) => ({
-                secret: env.get('JWT_SECRET_KEY'),
-                signOptions: {
-                    expiresIn: env.get('JWT_EXPIRATION_TIME'),
-                },
-            }),
-        }),
-    ],
+    imports: ImportAuthenticationModule,
     controllers: [AuthenticationController],
     providers: [
         // Transformers
         AuthenticationTransformer,
+        TransformersGlobal,
+
+        JWTAuthStrategy,
     ],
-    exports: [JwtModule],
+    exports: [JwtModule, PassportModule, JWTAuthStrategy],
 })
 export class AuthenticationModule {}

@@ -10,7 +10,8 @@ import { UsersEntity } from 'src/infrastructures/database/postgres/entities/user
 import { CreateUserDto } from 'src/interfaces/rests/admin/users/dto/users.dto';
 import { SigninDto } from 'src/interfaces/rests/auth/authentication/dto/authentication.dto';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';
-import { getConnection, getRepository } from 'typeorm';
+import { getConnection } from 'typeorm';
+import { MapUserRoleRepository } from '../repositories/map-user-role.repository';
 import { UsersRepository } from '../repositories/users.repository';
 import { UserProfilesRepository } from '../repositories/user_profiles.repository';
 import { UserProfilesService } from './user_profiles.service';
@@ -22,6 +23,8 @@ export class UserService {
         private readonly userRepository: UsersRepository,
         @InjectRepository(UserProfilesRepository)
         private readonly userProfileRepository: UserProfilesRepository,
+        @InjectRepository(MapUserRoleRepository)
+        private readonly mapUserRoleRepository: MapUserRoleRepository,
         private readonly userProfileService: UserProfilesService,
         private readonly jwtService: JwtService,
     ) {}
@@ -93,14 +96,9 @@ export class UserService {
             user.id,
         );
 
-        const mapRoleUserRepository = getRepository(MapUserRoleEntity);
-
-        const roles = await mapRoleUserRepository.find({
-            where: {
-                userId: user.id,
-            },
-            relations: ['role'],
-        });
+        const roles = await this.mapUserRoleRepository.GetRolesByUserId(
+            user.id,
+        );
 
         const payload = {
             uid: user.id,
@@ -108,6 +106,7 @@ export class UserService {
             email: user.email,
             isEmailVerified: user.isEmailVerified,
             status: user.accountStatus,
+            roles: roles.map((r) => r?.role?.name),
         };
 
         const refreshPayload = {
@@ -118,5 +117,16 @@ export class UserService {
         const refreshToken = this.jwtService.sign(refreshPayload);
 
         return [userWithProfile, roles, token, refreshToken];
+    }
+
+    async GetInformationOfAuthenticatedUser(
+        uid: string,
+    ): Promise<[UsersEntity, number[]]> {
+        const user = await this.userProfileService.GetProfileById(uid);
+        const roles = await this.mapUserRoleRepository.GetRolesByUserId(uid);
+
+        const listRoles = roles.map((r) => r?.role?.id);
+
+        return [user, listRoles];
     }
 }

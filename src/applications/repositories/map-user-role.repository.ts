@@ -2,4 +2,13 @@ import { MapUserRoleEntity } from 'src/infrastructures/database/postgres/entitie
 import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(MapUserRoleEntity)
-export class MapUserRoleRepository extends Repository<MapUserRoleEntity> {}
+export class MapUserRoleRepository extends Repository<MapUserRoleEntity> {
+    async GetRolesByUserId(uid: string): Promise<MapUserRoleEntity[]> {
+        return this.find({
+            where: {
+                userId: uid,
+            },
+            relations: ['role'],
+        });
+    }
+}
