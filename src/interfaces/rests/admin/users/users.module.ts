@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from 'src/applications/repositories/users.repository';
 import { UserService } from 'src/applications/services/users.service';
 import { UserUsecase } from 'src/applications/usecases/domain/admin/users.usecase';
+import { MailModule } from 'src/interfaces/mail/mail.module';
 import { AuthenticationModule } from '../../auth/authentication/authentication.module';
 import { ProfileModule } from '../profiles/profile.module';
 import { RolesModule } from '../roles/roles.module';
@@ -14,6 +15,7 @@ import { UsersTransformer } from './users.transformer';
         forwardRef(() => ProfileModule),
         forwardRef(() => RolesModule),
         forwardRef(() => AuthenticationModule),
+        MailModule,
         TypeOrmModule.forFeature([UsersRepository]),
     ],
     controllers: [UsersController],

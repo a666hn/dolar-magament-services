@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MapUserRoleEntity } from 'src/infrastructures/database/postgres/entities/map-user-role.entity';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
+import { MailService } from 'src/interfaces/mail/mail.service';
 import { CreateUserDto } from 'src/interfaces/rests/admin/users/dto/users.dto';
 import { SigninDto } from 'src/interfaces/rests/auth/authentication/dto/authentication.dto';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';
@@ -27,6 +28,7 @@ export class UserService {
         private readonly mapUserRoleRepository: MapUserRoleRepository,
         private readonly userProfileService: UserProfilesService,
         private readonly jwtService: JwtService,
+        private readonly mailService: MailService,
     ) {}
 
     async RegisterUser(userDto: CreateUserDto): Promise<UsersEntity> {
@@ -55,6 +57,8 @@ export class UserService {
             userModel.profile = userProfileModel;
 
             await this.userRepository.save(userModel);
+
+            await this.mailService.sendConfirmationEmail(userModel, 'abc');
 
             await queryRunner.commitTransaction();
 

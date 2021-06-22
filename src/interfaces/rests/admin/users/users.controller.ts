@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { UserUsecase } from 'src/applications/usecases/domain/admin/users.usecase';
 import {
     ACCOUNT_SIGNUP_URL,
@@ -18,7 +18,6 @@ export class UsersController {
     ) {}
 
     @Post(ACCOUNT_SIGNUP_URL)
-    @HttpCode(201)
     async RegisterUser(
         @Body() userDto: CreateUserDto,
     ): Promise<DataResponse<UserRegistrationDataResponse>> {
