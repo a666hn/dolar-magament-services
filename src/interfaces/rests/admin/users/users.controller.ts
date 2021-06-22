@@ -6,21 +6,21 @@ import {
     VERSION_1,
 } from 'src/dictionaries/constant.dictionary';
 import { DataResponse } from 'src/globals/global.interface';
-import { AccountTransformers } from './account.transformer';
-import { CreateAccountDto } from './dto/account.dto';
-import { UserRegistrationDataResponse } from './interfaces/account.interface';
+import { UsersTransformer } from './users.transformer';
+import { CreateUserDto } from './dto/users.dto';
+import { UserRegistrationDataResponse } from './interfaces/users.interface';
 
 @Controller(`/${VERSION_1}/${ACCOUNT_URL}`)
-export class AccountController {
+export class UsersController {
     constructor(
         private userUsecase: UserUsecase,
-        private transform: AccountTransformers,
+        private transform: UsersTransformer,
     ) {}
 
     @Post(ACCOUNT_SIGNUP_URL)
     @HttpCode(201)
     async RegisterUser(
-        @Body() userDto: CreateAccountDto,
+        @Body() userDto: CreateUserDto,
     ): Promise<DataResponse<UserRegistrationDataResponse>> {
         const user = await this.userUsecase.RegisterUser(userDto);
 

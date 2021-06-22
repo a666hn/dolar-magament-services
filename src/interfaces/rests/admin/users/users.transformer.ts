@@ -1,8 +1,8 @@
 import { DataResponse } from 'src/globals/global.interface';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
-import { UserRegistrationDataResponse } from './interfaces/account.interface';
+import { UserRegistrationDataResponse } from './interfaces/users.interface';
 
-export class AccountTransformers {
+export class UsersTransformer {
     transformSuccessRegistration(
         user: UsersEntity,
     ): DataResponse<UserRegistrationDataResponse> {

@@ -4,15 +4,15 @@ import { UsersRepository } from 'src/applications/repositories/users.repository'
 import { UserService } from 'src/applications/services/users.service';
 import { UserUsecase } from 'src/applications/usecases/domain/admin/users.usecase';
 import { ProfileModule } from '../profiles/profile.module';
-import { AccountController } from './account.controller';
-import { AccountTransformers } from './account.transformer';
+import { UsersController } from './users.controller';
+import { UsersTransformer } from './users.transformer';
 
 @Module({
     imports: [
         forwardRef(() => ProfileModule),
         TypeOrmModule.forFeature([UsersRepository]),
     ],
-    controllers: [AccountController],
+    controllers: [UsersController],
     providers: [
         // Services...
         UserService,
@@ -21,8 +21,8 @@ import { AccountTransformers } from './account.transformer';
         UserUsecase,
 
         // Transformers...
-        AccountTransformers,
+        UsersTransformer,
     ],
     exports: [TypeOrmModule],
 })
-export class AccountModule {}
+export class UsersModule {}

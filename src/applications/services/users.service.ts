@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
-import { CreateAccountDto } from 'src/interfaces/rests/admin/account/dto/account.dto';
+import { CreateUserDto } from 'src/interfaces/rests/admin/users/dto/users.dto';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';
 import { getConnection } from 'typeorm';
 import { UsersRepository } from '../repositories/users.repository';
@@ -15,7 +15,7 @@ export class UserService {
         @InjectRepository(UserProfilesRepository)
         private readonly userProfileRepository: UserProfilesRepository,
     ) {}
-    async RegisterUser(userDto: CreateAccountDto): Promise<UsersEntity> {
+    async RegisterUser(userDto: CreateUserDto): Promise<UsersEntity> {
         const connection = getConnection();
         const queryRunner = connection.createQueryRunner();
 
