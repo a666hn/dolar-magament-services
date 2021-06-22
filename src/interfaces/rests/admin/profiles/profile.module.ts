@@ -21,6 +21,6 @@ import { ProfileTransformer } from './profile.transformer';
         ProfileTransformer,
     ],
     controllers: [ProfileController],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, UserProfilesService],
 })
 export class ProfileModule {}

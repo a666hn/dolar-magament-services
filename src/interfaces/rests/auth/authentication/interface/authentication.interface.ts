@@ -14,8 +14,6 @@ interface UserData {
 }
 
 interface MetaLogin {
-    isEmailVerified: boolean;
-    status: string;
     token: string;
     refreshToken: string;
 }

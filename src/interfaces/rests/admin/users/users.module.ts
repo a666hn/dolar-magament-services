@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from 'src/applications/repositories/users.repository';
 import { UserService } from 'src/applications/services/users.service';
 import { UserUsecase } from 'src/applications/usecases/domain/admin/users.usecase';
+import { AuthenticationModule } from '../../auth/authentication/authentication.module';
 import { ProfileModule } from '../profiles/profile.module';
 import { UsersController } from './users.controller';
 import { UsersTransformer } from './users.transformer';
@@ -10,6 +11,7 @@ import { UsersTransformer } from './users.transformer';
 @Module({
     imports: [
         forwardRef(() => ProfileModule),
+        forwardRef(() => AuthenticationModule),
         TypeOrmModule.forFeature([UsersRepository]),
     ],
     controllers: [UsersController],
@@ -23,6 +25,6 @@ import { UsersTransformer } from './users.transformer';
         // Transformers...
         UsersTransformer,
     ],
-    exports: [TypeOrmModule],
+    exports: [TypeOrmModule, UserUsecase],
 })
 export class UsersModule {}
