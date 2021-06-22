@@ -7,7 +7,7 @@ export interface Header {
 
 export interface DataResponse<T> {
     message?: string | 'Success';
-    data: T;
+    data?: T;
 }
 
 export interface ID {

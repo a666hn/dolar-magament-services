@@ -1,6 +1,18 @@
-import { Controller, Get, NotFoundException } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    NotFoundException,
+    Param,
+    Post,
+} from '@nestjs/common';
 import { RolesUsecase } from 'src/applications/usecases/domain/admin/roles.usecase';
-import { ROLES_GET_ALL_URL, ROLES_URL, VERSION_1 } from 'src/dictionaries/constant.dictionary';
+import {
+    ROLES_ASSIGN_USER_URL,
+    ROLES_GET_ALL_URL,
+    ROLES_URL,
+    VERSION_1,
+} from 'src/dictionaries/constant.dictionary';
 import { DataResponse } from 'src/globals/global.interface';
 import { RoleResponse } from './interface/roles.interface';
 import { RolesTransformers } from './roles.transformer';
@@ -21,5 +33,15 @@ export class RolesController {
         }
 
         return this.roleTransformer.transformAllRoles(roles);
+    }
+
+    @Post(`/${ROLES_ASSIGN_USER_URL}/:id`)
+    async AssignRoleToUser(
+        @Param('id') id: string,
+        @Body('roleId') roleId: number,
+    ): Promise<DataResponse<string>> {
+        const msg = await this.roleUsecase.AssignRoleToUser(id, roleId);
+
+        return this.roleTransformer.transformAssignRoleToUser(msg);
     }
 }

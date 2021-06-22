@@ -18,4 +18,10 @@ export class RolesTransformers {
             },
         };
     }
+
+    transformAssignRoleToUser(message: string): DataResponse<string> {
+        return {
+            message,
+        };
+    }
 }

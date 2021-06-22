@@ -31,3 +31,4 @@ export const PROFILE_URL = 'profile';
 
 export const ROLES_URL = 'role';
 export const ROLES_GET_ALL_URL = 'all';
+export const ROLES_ASSIGN_USER_URL = 'assign-role';
