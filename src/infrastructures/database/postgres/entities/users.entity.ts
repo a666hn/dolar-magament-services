@@ -8,6 +8,7 @@ import {
     Entity,
     Index,
     JoinColumn,
+    OneToMany,
     OneToOne,
     UpdateDateColumn,
 } from 'typeorm';
@@ -16,6 +17,7 @@ import * as bcrypt from 'bcrypt';
 import { UserProfilesEntity } from './user_profiles.entity';
 import { toUpper } from 'lodash';
 import { ACCOUNT_STATUS } from 'src/globals/global.enum';
+import { MapUserRoleEntity } from './map-user-role.entity';
 
 @Index('user_entities_idx', ['email', 'username'], { unique: true })
 @Index('user_entities_idx', ['name', 'accountStatus'])
@@ -93,6 +95,9 @@ export class UsersEntity extends BaseEntity {
         referencedColumnName: 'id',
     })
     profile: UserProfilesEntity;
+
+    @OneToMany(() => MapUserRoleEntity, (mur) => mur.user)
+    public mapUserRoles: MapUserRoleEntity[];
 
     @BeforeInsert()
     updateFullName() {

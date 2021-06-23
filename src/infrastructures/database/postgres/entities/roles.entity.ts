@@ -7,13 +7,16 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    Index,
     OneToMany,
     PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
 import { MapRolePermissionsEntity } from './map-role-permissions.entity';
+import { MapUserRoleEntity } from './map-user-role.entity';
 
 @Entity(ROLE_ENTITY)
+@Index('role_idx', ['name'], { unique: true })
 export class RolesEntity {
     @PrimaryColumn()
     id: number;
@@ -52,6 +55,9 @@ export class RolesEntity {
 
     @OneToMany(() => MapRolePermissionsEntity, (mrp) => mrp.role)
     public mapRolePermissions: MapRolePermissionsEntity[];
+
+    @OneToMany(() => MapUserRoleEntity, (mur) => mur.user)
+    public mapUserRoles: MapUserRoleEntity[];
 
     @BeforeInsert()
     updateNameAfterInsert() {

@@ -14,8 +14,8 @@ import { BaseEntity } from '../base.entity';
 import { PermissionsEntity } from './permissions.entity';
 import { RolesEntity } from './roles.entity';
 
-@Index('map_role_permissions_idx', ['roleId', 'permissionId'], { unique: true })
 @Entity(MAP_ROLE_PERMISSIONS_ENTITY)
+@Index('map_role_permissions_idx', ['roleId', 'permissionId'], { unique: true })
 export class MapRolePermissionsEntity extends BaseEntity {
     @Column({
         name: 'role_id',

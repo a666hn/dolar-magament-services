@@ -5,11 +5,13 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    Index,
     UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 
 @Entity(USER_PROFILE_ENTITY)
+@Index('user_profile_idx', ['phoneNumber'], { unique: true })
 export class UserProfilesEntity extends BaseEntity {
     @Column({
         type: 'text',

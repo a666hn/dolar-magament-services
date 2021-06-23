@@ -5,6 +5,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    Index,
     OneToMany,
     UpdateDateColumn,
 } from 'typeorm';
@@ -12,6 +13,7 @@ import { BaseEntity } from '../base.entity';
 import { MapRolePermissionsEntity } from './map-role-permissions.entity';
 
 @Entity(PERMISSION_ENTITY)
+@Index('permission_idx', ['name'], { unique: true })
 export class PermissionsEntity extends BaseEntity {
     @Column({
         unique: true,
