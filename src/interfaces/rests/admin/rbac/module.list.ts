@@ -1,6 +1,5 @@
 import { forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MapRolePermissionsRepository } from 'src/applications/repositories/map-role-permissions.repository';
 import { MapUserRoleRepository } from 'src/applications/repositories/map-user-role.repository';
 import { PermissionsRepository } from 'src/applications/repositories/permissions.repository';
 import { RolesRepository } from 'src/applications/repositories/roles.repository';
@@ -14,6 +13,5 @@ export const ModuleNeedForRBAC = [
         RolesRepository,
         MapUserRoleRepository,
         PermissionsRepository,
-        MapRolePermissionsRepository,
     ]),
 ];
