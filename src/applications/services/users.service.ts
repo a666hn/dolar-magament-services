@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { flatten, uniq } from 'lodash';
 import { MapUserRoleEntity } from 'src/infrastructures/database/postgres/entities/map-user-role.entity';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 import { MailService } from 'src/interfaces/mail/mail.service';
@@ -73,7 +74,7 @@ export class UserService {
 
     async SignInUser(
         userDto: SigninDto,
-    ): Promise<[UsersEntity, MapUserRoleEntity[], string, string]> {
+    ): Promise<[UsersEntity, string, string]> {
         const { username, password } = userDto;
         const user = await this.userRepository.findUserByEmailOrUsername(
             username,
@@ -96,12 +97,21 @@ export class UserService {
             );
         }
 
-        const userWithProfile = await this.userProfileService.GetProfileById(
-            user.id,
+        const userWithCredential =
+            await this.userRepository.findUserWithCredentialsById(user.id);
+
+        const roles = userWithCredential?.mapUserRoles?.map(
+            (mur) => mur.role?.id,
         );
 
-        const roles = await this.mapUserRoleRepository.GetRolesByUserId(
-            user.id,
+        const permissions = uniq(
+            flatten(
+                userWithCredential?.mapUserRoles?.map((mur) =>
+                    mur?.role?.mapRolePermissions?.map(
+                        (mrp) => mrp?.permission?.name,
+                    ),
+                ),
+            ),
         );
 
         const payload = {
@@ -110,7 +120,8 @@ export class UserService {
             email: user.email,
             isEmailVerified: user.isEmailVerified,
             status: user.accountStatus,
-            roles: roles.map((r) => r?.role?.name),
+            roles: roles,
+            permissions: permissions,
         };
 
         const refreshPayload = {
@@ -120,7 +131,7 @@ export class UserService {
         const token = this.jwtService.sign(payload);
         const refreshToken = this.jwtService.sign(refreshPayload);
 
-        return [userWithProfile, roles, token, refreshToken];
+        return [userWithCredential, token, refreshToken];
     }
 
     async GetInformationOfAuthenticatedUser(

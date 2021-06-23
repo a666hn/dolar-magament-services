@@ -1,9 +1,10 @@
 import { ID } from 'src/globals/global.interface';
 
 export interface LoginResponse extends ID {
-    user: UserData;
+    info: UserData;
     meta: MetaLogin;
-    roles: string[];
+    roles: number[];
+    permissions: string[];
 }
 
 interface UserData {

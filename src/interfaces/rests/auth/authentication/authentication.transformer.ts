@@ -1,22 +1,30 @@
+import { flatten, uniq } from 'lodash';
 import { DataResponse } from 'src/globals/global.interface';
-import { MapUserRoleEntity } from 'src/infrastructures/database/postgres/entities/map-user-role.entity';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 import { LoginResponse } from './interface/authentication.interface';
 
 export class AuthenticationTransformer {
     transformPayloadInformation(
         user: UsersEntity,
-        roles: MapUserRoleEntity[],
         token: string,
         refreshToken: string,
     ): DataResponse<LoginResponse> {
-        const newRoles = roles.map((rl) => rl?.role?.name);
+        const newRoles = user?.mapUserRoles?.map((rl) => rl?.role?.id);
+        const permissions = uniq(
+            flatten(
+                user?.mapUserRoles?.map((mur) =>
+                    mur?.role?.mapRolePermissions?.map(
+                        (mrp) => mrp?.permission?.name,
+                    ),
+                ),
+            ),
+        );
 
         return {
             message: 'Login berhasil',
             data: {
                 id: user?.id,
-                user: {
+                info: {
                     name: user?.name,
                     username: user?.username,
                     email: user?.email,
@@ -27,6 +35,7 @@ export class AuthenticationTransformer {
                     refreshToken,
                 },
                 roles: newRoles,
+                permissions: permissions,
             },
         };
     }

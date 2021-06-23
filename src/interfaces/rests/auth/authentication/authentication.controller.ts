@@ -22,12 +22,12 @@ export class AuthenticationController {
     async SignIn(
         @Body() userDto: SigninDto,
     ): Promise<DataResponse<LoginResponse>> {
-        const [user, roles, token, refreshToken] =
-            await this.userUsecase.SignInUser(userDto);
+        const [user, token, refreshToken] = await this.userUsecase.SignInUser(
+            userDto,
+        );
 
         return this.authTransform.transformPayloadInformation(
             user,
-            roles,
             token,
             refreshToken,
         );

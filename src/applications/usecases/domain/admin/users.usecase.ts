@@ -15,7 +15,7 @@ export class UserUsecase {
 
     async SignInUser(
         userDto: SigninDto,
-    ): Promise<[UsersEntity, MapUserRoleEntity[], string, string]> {
+    ): Promise<[UsersEntity, string, string]> {
         return this.userService.SignInUser(userDto);
     }
 }
