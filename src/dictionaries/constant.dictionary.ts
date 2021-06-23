@@ -30,6 +30,7 @@ export const USER_PROFILE_ENTITY = 'user_profiles';
 export const ROLE_ENTITY = 'roles';
 export const PERMISSION_ENTITY = 'permissions';
 export const MAP_USER_ROLE_ENTITY = 'map_user_role';
+export const MAP_ROLE_PERMISSIONS_ENTITY = 'map_role_permission';
 
 // URL Variables!
 export const ACCOUNT_URL = 'account';

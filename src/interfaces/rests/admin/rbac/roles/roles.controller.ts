@@ -19,7 +19,7 @@ import { DataResponse } from 'src/globals/global.interface';
 import { JWTGuard } from 'src/guards/jwt.guard';
 import { RBACGuard } from 'src/guards/rbac.guard';
 import { RequiredRBAC } from 'src/guards/rbac.metadata';
-import { RoleResponse } from './interface/roles.interface';
+import { RoleResponse } from '../interface/roles.interface';
 import { RolesTransformers } from './roles.transformer';
 
 @Controller(`/${VERSION_1}/${ROLES_URL}`)

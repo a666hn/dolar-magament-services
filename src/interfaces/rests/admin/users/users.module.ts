@@ -6,14 +6,14 @@ import { UserUsecase } from 'src/applications/usecases/domain/admin/users.usecas
 import { MailModule } from 'src/interfaces/mail/mail.module';
 import { AuthenticationModule } from '../../auth/authentication/authentication.module';
 import { ProfileModule } from '../profiles/profile.module';
-import { RolesModule } from '../roles/roles.module';
+import { RBACModule } from '../rbac/rbac.module';
 import { UsersController } from './users.controller';
 import { UsersTransformer } from './users.transformer';
 
 @Module({
     imports: [
         forwardRef(() => ProfileModule),
-        forwardRef(() => RolesModule),
+        forwardRef(() => RBACModule),
         forwardRef(() => AuthenticationModule),
         MailModule,
         TypeOrmModule.forFeature([UsersRepository]),

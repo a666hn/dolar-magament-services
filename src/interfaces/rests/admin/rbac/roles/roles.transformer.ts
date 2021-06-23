@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataResponse } from 'src/globals/global.interface';
 import { RolesEntity } from 'src/infrastructures/database/postgres/entities/roles.entity';
-import { RoleResponse } from './interface/roles.interface';
+import { RoleResponse } from '../interface/roles.interface';
 
 @Injectable()
 export class RolesTransformers {
