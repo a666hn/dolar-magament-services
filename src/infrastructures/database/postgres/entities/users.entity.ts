@@ -6,6 +6,7 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    Index,
     JoinColumn,
     OneToOne,
     UpdateDateColumn,
@@ -16,6 +17,8 @@ import { UserProfilesEntity } from './user_profiles.entity';
 import { toUpper } from 'lodash';
 import { ACCOUNT_STATUS } from 'src/globals/global.enum';
 
+@Index('user_entities_idx', ['email', 'username'], { unique: true })
+@Index('user_entities_idx', ['name', 'accountStatus'])
 @Entity(USER_ENTITY)
 export class UsersEntity extends BaseEntity {
     @Column({
