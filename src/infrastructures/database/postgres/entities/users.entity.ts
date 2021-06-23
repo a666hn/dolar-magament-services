@@ -19,8 +19,8 @@ import { toUpper } from 'lodash';
 import { ACCOUNT_STATUS } from 'src/globals/global.enum';
 import { MapUserRoleEntity } from './map-user-role.entity';
 
-@Index('user_entities_idx', ['email', 'username'], { unique: true })
-@Index('user_entities_idx', ['name', 'accountStatus'])
+@Index('user_email_username_idx', ['email', 'username'], { unique: true })
+@Index('user_name_accountstatus_idx', ['name', 'accountStatus'])
 @Entity(USER_ENTITY)
 export class UsersEntity extends BaseEntity {
     @Column({
