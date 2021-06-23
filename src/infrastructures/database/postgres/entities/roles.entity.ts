@@ -1,8 +1,5 @@
 import { toUpper } from 'lodash';
-import {
-    MAP_ROLE_PERMISSIONS_ENTITY,
-    ROLE_ENTITY,
-} from 'src/dictionaries/constant.dictionary';
+import { ROLE_ENTITY } from 'src/dictionaries/constant.dictionary';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -10,12 +7,11 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
-    JoinTable,
-    ManyToMany,
+    OneToMany,
     PrimaryColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { PermissionsEntity } from './permissions.entity';
+import { MapRolePermissionsEntity } from './map-role-permissions.entity';
 
 @Entity(ROLE_ENTITY)
 export class RolesEntity {
@@ -54,19 +50,8 @@ export class RolesEntity {
     })
     versions: number;
 
-    @ManyToMany(() => PermissionsEntity)
-    @JoinTable({
-        name: MAP_ROLE_PERMISSIONS_ENTITY,
-        joinColumn: {
-            name: 'role_id',
-            referencedColumnName: 'id',
-        },
-        inverseJoinColumn: {
-            name: 'permission_id',
-            referencedColumnName: 'id',
-        },
-    })
-    permissions: PermissionsEntity[];
+    @OneToMany(() => MapRolePermissionsEntity, (mrp) => mrp.role)
+    public mapRolePermissions: MapRolePermissionsEntity[];
 
     @BeforeInsert()
     updateNameAfterInsert() {

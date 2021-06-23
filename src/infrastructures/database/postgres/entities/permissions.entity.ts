@@ -5,9 +5,11 @@ import {
     CreateDateColumn,
     DeleteDateColumn,
     Entity,
+    OneToMany,
     UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from '../base.entity';
+import { MapRolePermissionsEntity } from './map-role-permissions.entity';
 
 @Entity(PERMISSION_ENTITY)
 export class PermissionsEntity extends BaseEntity {
@@ -42,6 +44,9 @@ export class PermissionsEntity extends BaseEntity {
         default: 0,
     })
     versions: number;
+
+    @OneToMany(() => MapRolePermissionsEntity, (mrp) => mrp.permission)
+    public mapRolePermissions: MapRolePermissionsEntity[];
 
     @BeforeUpdate()
     updateVersionOnUpdate() {
