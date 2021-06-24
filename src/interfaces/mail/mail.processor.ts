@@ -8,17 +8,23 @@ import {
 import { Job } from 'bull';
 import { Logger } from '@nestjs/common';
 import {
+    APP_NAME,
     BULL_QUEUE_NAME,
     CONFIRMATION_REGISTRATION_EMAIL_QUEUE,
+    SERVICE,
 } from 'src/dictionaries/constant.dictionary';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Processor(BULL_QUEUE_NAME)
 export class MailProcessor {
     private readonly logger = new Logger(this.constructor.name);
 
-    constructor(private readonly mailerService: MailerService) {}
+    constructor(
+        private readonly env: ConfigService,
+        private readonly mailerService: MailerService,
+    ) {}
 
     @OnQueueActive()
     onActive(job: Job) {
@@ -54,7 +60,9 @@ export class MailProcessor {
             `Sending confirmation email to '${job.data.user.email}'`,
         );
 
-        const url = `http://localhost:6667/email/verification?id=${job.data.user.id}&token=${job.data.token}`;
+        const url = `http://${this.env.get('APP_HOST')}:${this.env.get(
+            'APP_PORT',
+        )}/${APP_NAME}/${SERVICE}/email/confirmation?token=${job.data.token}`;
 
         try {
             await this.mailerService.sendMail({
