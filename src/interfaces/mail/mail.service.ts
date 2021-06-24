@@ -1,31 +1,32 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
+import {
+    BULL_QUEUE_NAME,
+    CONFIRMATION_REGISTRATION_EMAIL_QUEUE,
+} from 'src/dictionaries/constant.dictionary';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 
 @Injectable()
 export class MailService {
-    constructor(private readonly mailerService: MailerService) {}
+    constructor(
+        @InjectQueue(BULL_QUEUE_NAME)
+        private readonly queue: Queue,
+    ) {}
 
     async sendConfirmationEmail(
         user: UsersEntity,
         token: string,
-    ): Promise<void> {
-        const url = `http://localhost:6667/email/verification?id=${user.id}&token=${token}`;
-
+    ): Promise<boolean> {
         try {
-            await this.mailerService.sendMail({
-                to: user.email,
-                subject: 'Welcome to Nice App! Confirm your Email',
-                template: './confirmation',
-                context: {
-                    name: user.name,
-                    url,
-                },
+            await this.queue.add(CONFIRMATION_REGISTRATION_EMAIL_QUEUE, {
+                user,
+                token,
             });
+
+            return true;
         } catch (err) {
-            throw new InternalServerErrorException(
-                'Ada sesuatu yang salah. Silahkan menghubungi admin kami',
-            );
+            return false;
         }
     }
 }

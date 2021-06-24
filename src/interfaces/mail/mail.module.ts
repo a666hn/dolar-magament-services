@@ -3,6 +3,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MailService } from './mail.service';
 import { ConfigService } from '@nestjs/config';
+import { BullModule } from '@nestjs/bull';
+import { BULL_QUEUE_NAME } from 'src/dictionaries/constant.dictionary';
+import { MailProcessor } from './mail.processor';
 
 @Module({
     imports: [
@@ -29,8 +32,18 @@ import { ConfigService } from '@nestjs/config';
                 },
             }),
         }),
+        BullModule.registerQueueAsync({
+            name: BULL_QUEUE_NAME,
+            inject: [ConfigService],
+            useFactory: async (env: ConfigService) => ({
+                redis: {
+                    host: env.get('REDIS_HOST'),
+                    port: env.get('REDIS_PORT'),
+                },
+            }),
+        }),
     ],
-    providers: [MailService],
+    providers: [MailService, MailProcessor],
     exports: [MailService],
 })
 export class MailModule {}

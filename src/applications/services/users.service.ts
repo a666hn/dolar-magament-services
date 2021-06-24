@@ -6,7 +6,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { flatten, uniq } from 'lodash';
-import { MapUserRoleEntity } from 'src/infrastructures/database/postgres/entities/map-user-role.entity';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 import { MailService } from 'src/interfaces/mail/mail.service';
 import { CreateUserDto } from 'src/interfaces/rests/admin/users/dto/users.dto';
