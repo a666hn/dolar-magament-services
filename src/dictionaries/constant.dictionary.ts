@@ -51,6 +51,7 @@ export const BANK_URL = 'finance';
 export const BANK_LIST_URL = 'bank';
 
 export const CATEGORIES_URL = 'categories';
+export const UPLOAD_BULK_CATEGORIES_URL = 'upload-bulk';
 
 export const EMAIL_URL = 'email';
 export const CONFIRMATION_EMAIL_URL = 'confirmation';
