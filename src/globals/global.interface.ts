@@ -6,8 +6,8 @@ export interface Header {
 }
 
 export interface DataResponse<T> {
-    message?: string | 'Success';
-    data: T;
+    message?: string;
+    data?: T;
 }
 
 export interface ID {
@@ -17,4 +17,14 @@ export interface ID {
 export interface Timestamps {
     createdAt: Date;
     updatedAt: Date;
+}
+
+export interface GetInformationOfAuthenticatedUserData {
+    id: string;
+    email: string;
+    username: string;
+    isEmailVerified: boolean;
+    status: string;
+    roles: number[];
+    permissions: any[];
 }
