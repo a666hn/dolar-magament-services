@@ -1,5 +1,5 @@
 import { Controller, Post, Query } from '@nestjs/common';
-import { UserUsecase } from 'src/applications/usecases/domain/admin/users.usecase';
+import { UserUsecase } from 'src/applications/usecases/admin/users.usecase';
 import {
     CONFIRMATION_EMAIL_URL,
     EMAIL_URL,

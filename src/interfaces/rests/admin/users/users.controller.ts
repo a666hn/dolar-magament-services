@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserUsecase } from 'src/applications/usecases/domain/admin/users.usecase';
+import { UserUsecase } from 'src/applications/usecases/admin/users.usecase';
 import {
     ACCOUNT_SIGNUP_URL,
     ACCOUNT_URL,

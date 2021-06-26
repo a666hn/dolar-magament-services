@@ -26,4 +26,5 @@ export interface GetInformationOfAuthenticatedUserData {
     isEmailVerified: boolean;
     status: string;
     roles: number[];
+    permissions: any[];
 }

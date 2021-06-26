@@ -16,7 +16,8 @@ export const RBAC_METADATA_KEY = 'AUTH_BASE_RBAC';
 // RBAC
 export const RBAC_KEY_ID = {
     SYSTEM_ADMINISTRATOR_GUARD: 1,
-    ADMINISTRATOR: 2,
+    ADMINISTRATOR_GUARD: 2,
+    GUEST_GUARD: 3,
 };
 
 // Version Variable!

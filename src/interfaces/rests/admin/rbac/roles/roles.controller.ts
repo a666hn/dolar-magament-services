@@ -7,7 +7,7 @@ import {
     Post,
     UseGuards,
 } from '@nestjs/common';
-import { RolesUsecase } from 'src/applications/usecases/domain/admin/roles.usecase';
+import { RolesUsecase } from 'src/applications/usecases/admin/roles.usecase';
 import {
     RBAC_KEY_ID,
     ROLES_ASSIGN_USER_URL,
@@ -15,7 +15,11 @@ import {
     ROLES_URL,
     VERSION_1,
 } from 'src/dictionaries/constant.dictionary';
-import { DataResponse } from 'src/globals/global.interface';
+import {
+    DataResponse,
+    GetInformationOfAuthenticatedUserData,
+} from 'src/globals/global.interface';
+import { GetAuthenticatedUser } from 'src/guards/decorators/user-authenticated.decorator';
 import { JWTGuard } from 'src/guards/jwt.guard';
 import { RBACGuard } from 'src/guards/rbac.guard';
 import { RequiredRBAC } from 'src/guards/rbac.metadata';
@@ -43,7 +47,7 @@ export class RolesController {
     @UseGuards(JWTGuard, RBACGuard)
     @RequiredRBAC(
         RBAC_KEY_ID.SYSTEM_ADMINISTRATOR_GUARD,
-        RBAC_KEY_ID.ADMINISTRATOR,
+        RBAC_KEY_ID.ADMINISTRATOR_GUARD,
     )
     @Post(`/${ROLES_ASSIGN_USER_URL}/:id`)
     async AssignRoleToUser(
@@ -56,9 +60,11 @@ export class RolesController {
     }
 
     @UseGuards(JWTGuard, RBACGuard)
-    @RequiredRBAC(4)
+    @RequiredRBAC(RBAC_KEY_ID.GUEST_GUARD)
     @Get('/test')
-    GetTest(): void {
-        console.log('oke');
+    GetTest(
+        @GetAuthenticatedUser() user: GetInformationOfAuthenticatedUserData,
+    ): void {
+        console.log('oke', user);
     }
 }

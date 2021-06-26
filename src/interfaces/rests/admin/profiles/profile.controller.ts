@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { UserProfilesUsecase } from 'src/applications/usecases/domain/admin/user_profiles.usecase';
+import { UserProfilesUsecase } from 'src/applications/usecases/admin/user_profiles.usecase';
 import { PROFILE_URL, VERSION_1 } from 'src/dictionaries/constant.dictionary';
 import { DataResponse } from 'src/globals/global.interface';
 import { ProfileResponse } from './interfaces/profile.interface';

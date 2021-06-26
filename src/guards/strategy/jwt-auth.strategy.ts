@@ -24,15 +24,15 @@ export class JWTAuthStrategy extends PassportStrategy(Strategy) {
         payload: any,
     ): Promise<GetInformationOfAuthenticatedUserData> {
         const { uid } = payload;
-        const [user, roles] =
+        const userWithCredentials =
             await this.userService.GetInformationOfAuthenticatedUser(uid);
 
-        if (!user) {
+        if (!userWithCredentials) {
             throw new UnauthorizedException('Unauthorized user');
         }
 
-        const data = { ...user, roles };
-
-        return this.transformerGlobal.transformUserCredentials(data);
+        return this.transformerGlobal.transformUserCredentials(
+            userWithCredentials,
+        );
     }
 }

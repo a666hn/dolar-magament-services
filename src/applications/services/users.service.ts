@@ -144,15 +144,11 @@ export class UserService {
         return [userWithCredential, token, refreshToken];
     }
 
-    async GetInformationOfAuthenticatedUser(
-        uid: string,
-    ): Promise<[UsersEntity, number[]]> {
-        const user = await this.userProfileService.GetProfileById(uid);
-        const roles = await this.mapUserRoleRepository.GetRolesByUserId(uid);
+    async GetInformationOfAuthenticatedUser(uid: string): Promise<UsersEntity> {
+        const userWithCredential =
+            await this.userRepository.findUserWithCredentialsById(uid);
 
-        const listRoles = roles.map((r) => r?.role?.id);
-
-        return [user, listRoles];
+        return userWithCredential;
     }
 
     async VerifyEmail(token: string): Promise<boolean> {
