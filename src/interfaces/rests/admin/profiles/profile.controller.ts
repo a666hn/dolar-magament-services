@@ -13,7 +13,9 @@ export class ProfileController {
     ) {}
 
     @Get('/:id')
-    async GetProfileById(@Param('id') id: string): Promise<DataResponse<ProfileResponse>> {
+    async GetProfileById(
+        @Param('id') id: string,
+    ): Promise<DataResponse<ProfileResponse>> {
         const profile = await this.profileUsecase.GetProfileById(id);
 
         return this.profileTransformer.transformUserProfile(profile);
