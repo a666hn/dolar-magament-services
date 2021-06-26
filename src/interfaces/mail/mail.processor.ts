@@ -12,6 +12,7 @@ import {
     BULL_QUEUE_NAME,
     CONFIRMATION_REGISTRATION_EMAIL_QUEUE,
     SERVICE,
+    VERSION_1,
 } from 'src/dictionaries/constant.dictionary';
 import { MailerService } from '@nestjs-modules/mailer';
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
@@ -62,7 +63,9 @@ export class MailProcessor {
 
         const url = `http://${this.env.get('APP_HOST')}:${this.env.get(
             'APP_PORT',
-        )}/${APP_NAME}/${SERVICE}/email/confirmation?token=${job.data.token}`;
+        )}/${APP_NAME}/${SERVICE}/${VERSION_1}/email/confirmation?token=${
+            job.data.token
+        }`;
 
         try {
             await this.mailerService.sendMail({

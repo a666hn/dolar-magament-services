@@ -11,4 +11,16 @@ export class MapUserRoleRepository extends Repository<MapUserRoleEntity> {
             relations: ['role'],
         });
     }
+
+    async AddDefaultRoleToNewUser(userId: string): Promise<any> {
+        const roleToUser = this.create({ userId });
+        roleToUser.roleId = 3;
+
+        try {
+            await this.save(roleToUser);
+            return true;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

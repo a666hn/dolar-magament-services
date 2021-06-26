@@ -2,6 +2,7 @@ import {
     BadRequestException,
     Injectable,
     NotFoundException,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,6 +20,8 @@ import { UserProfilesService } from './user_profiles.service';
 
 @Injectable()
 export class UserService {
+    private readonly connection = getConnection();
+
     constructor(
         @InjectRepository(UsersRepository)
         private readonly userRepository: UsersRepository,
@@ -32,8 +35,7 @@ export class UserService {
     ) {}
 
     async RegisterUser(userDto: CreateUserDto): Promise<UsersEntity> {
-        const connection = getConnection();
-        const queryRunner = connection.createQueryRunner();
+        const queryRunner = this.connection.createQueryRunner();
 
         queryRunner.connect();
 
@@ -58,7 +60,16 @@ export class UserService {
 
             await this.userRepository.save(userModel);
 
-            await this.mailService.sendConfirmationEmail(userModel, 'abc');
+            // Inject token for verify email
+            const verifyEmailPayload = { uid: userModel.id };
+            const verifyEmailToken = this.jwtService.sign(verifyEmailPayload, {
+                expiresIn: `30d`,
+            });
+
+            await this.mailService.sendConfirmationEmail(
+                userModel,
+                verifyEmailToken,
+            );
 
             await queryRunner.commitTransaction();
 
@@ -142,5 +153,39 @@ export class UserService {
         const listRoles = roles.map((r) => r?.role?.id);
 
         return [user, listRoles];
+    }
+
+    async VerifyEmail(token: string): Promise<boolean> {
+        const queryRunner = this.connection.createQueryRunner();
+
+        queryRunner.connect();
+
+        const decodeToken: any = this.jwtService.decode(token, {
+            json: true,
+        });
+
+        if (!decodeToken) {
+            throw new UnauthorizedException(
+                'Kamu tidak memiliki akses pada action ini',
+            );
+        }
+
+        await queryRunner.startTransaction();
+
+        try {
+            await this.userRepository.VerifiedUser(decodeToken.uid);
+            await this.mapUserRoleRepository.AddDefaultRoleToNewUser(
+                decodeToken.uid,
+            );
+
+            queryRunner.commitTransaction();
+
+            return true;
+        } catch (err) {
+            queryRunner.rollbackTransaction();
+            HandlePostgressError(err.code, err.message);
+        } finally {
+            queryRunner.release();
+        }
     }
 }

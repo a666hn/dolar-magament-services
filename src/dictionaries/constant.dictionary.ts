@@ -43,6 +43,9 @@ export const ROLES_URL = 'role';
 export const ROLES_GET_ALL_URL = 'all';
 export const ROLES_ASSIGN_USER_URL = 'assign-role';
 
+export const EMAIL_URL = 'email';
+export const CONFIRMATION_EMAIL_URL = 'confirmation';
+
 // Queue Variable
 export const BULL_QUEUE_NAME = 'mail_queue';
 
