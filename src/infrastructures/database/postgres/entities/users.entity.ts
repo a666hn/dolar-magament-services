@@ -18,6 +18,7 @@ import { UserProfilesEntity } from './user_profiles.entity';
 import { toUpper } from 'lodash';
 import { ACCOUNT_STATUS } from 'src/globals/global.enum';
 import { MapUserRoleEntity } from './map-user-role.entity';
+import { MapBankAccountEntity } from './map-bank-account.entity';
 
 @Index('user_email_username_idx', ['email', 'username'], { unique: true })
 @Index('user_name_accountstatus_idx', ['name', 'accountStatus'])
@@ -97,7 +98,10 @@ export class UsersEntity extends BaseEntity {
     profile: UserProfilesEntity;
 
     @OneToMany(() => MapUserRoleEntity, (mur) => mur.user)
-    public mapUserRoles: MapUserRoleEntity[];
+    mapUserRoles: MapUserRoleEntity[];
+
+    @OneToMany(() => MapBankAccountEntity, (mab) => mab.user)
+    mapBankAccount: MapBankAccountEntity[];
 
     @BeforeInsert()
     updateFullName() {

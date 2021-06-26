@@ -32,6 +32,9 @@ export const ROLE_ENTITY = 'roles';
 export const PERMISSION_ENTITY = 'permissions';
 export const MAP_USER_ROLE_ENTITY = 'map_user_role';
 export const MAP_ROLE_PERMISSIONS_ENTITY = 'map_role_permission';
+export const CATEGORIES_ENTITY = 'categories';
+export const BANK_ENTITY = 'bank';
+export const MAP_BANK_ACCOUNT_ENTITY = 'map_bank_account';
 
 // URL Variables!
 export const ACCOUNT_URL = 'account';
@@ -43,6 +46,11 @@ export const PROFILE_URL = 'profile';
 export const ROLES_URL = 'role';
 export const ROLES_GET_ALL_URL = 'all';
 export const ROLES_ASSIGN_USER_URL = 'assign-role';
+
+export const BANK_URL = 'finance';
+export const BANK_LIST_URL = 'bank';
+
+export const CATEGORIES_URL = 'categories';
 
 export const EMAIL_URL = 'email';
 export const CONFIRMATION_EMAIL_URL = 'confirmation';
