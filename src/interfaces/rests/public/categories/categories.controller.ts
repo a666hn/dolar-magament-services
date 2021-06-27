@@ -12,7 +12,11 @@ import { JWTGuard } from 'src/guards/jwt.guard';
 import { RBACGuard } from 'src/guards/rbac.guard';
 import { RequiredRBAC } from 'src/guards/rbac.metadata';
 import { CategoriesTransformer } from './categories.transformer';
-import { BulkInsertCategoriesDto } from './dto/categories.dto';
+import {
+    BulkInsertCategoriesDto,
+    CategoriesDataDto,
+} from './dto/categories.dto';
+import { ICategoriesData } from './interface/categories.interface';
 
 @Controller(`/${VERSION_1}/${CATEGORIES_URL}`)
 export class CategoriesController {
@@ -39,6 +43,25 @@ export class CategoriesController {
             affectedRow,
             categories,
             bulkData.length,
+        );
+    }
+
+    @UseGuards(JWTGuard, RBACGuard)
+    @RequiredRBAC(
+        RBAC_KEY_ID.SYSTEM_ADMINISTRATOR_GUARD,
+        RBAC_KEY_ID.ADMINISTRATOR_GUARD,
+    )
+    @Post()
+    @HttpCode(200)
+    async InsertSingleCategories(
+        @Body() categories: CategoriesDataDto,
+        @GetAuthenticatedUser('id') id: string,
+    ): Promise<DataResponse<ICategoriesData>> {
+        const categoriesData =
+            await this.categoriesUsecase.InsertSingleCategories(categories, id);
+
+        return this.categoriesTransformer.transformSingleCategories(
+            categoriesData,
         );
     }
 }

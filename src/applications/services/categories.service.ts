@@ -1,6 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { BulkInsertCategoriesDto } from 'src/interfaces/rests/public/categories/dto/categories.dto';
+import { CategoriesEntity } from 'src/infrastructures/database/postgres/entities/categories.entity';
+import {
+    BulkInsertCategoriesDto,
+    CategoriesDataDto,
+} from 'src/interfaces/rests/public/categories/dto/categories.dto';
+import { HandlePostgressError } from 'src/utils/postgress-handle-error';
 import { CategoriesRepository } from '../repositories/categories.repository';
 
 @Injectable()
@@ -15,5 +20,24 @@ export class CategoriesService {
         userId: string,
     ): Promise<[number, string[]]> {
         return this.categoriesRepository.BulkInsertCategories(bulk, userId);
+    }
+
+    async InsertSingleCategories(
+        categoriesDto: CategoriesDataDto,
+        userId: string,
+    ): Promise<CategoriesEntity> {
+        const { name, description } = categoriesDto;
+        const categories = this.categoriesRepository.create({
+            name,
+            description,
+            createdBy: userId,
+        });
+
+        try {
+            await this.categoriesRepository.save(categories);
+            return categories;
+        } catch (err) {
+            HandlePostgressError(err.code, err.message);
+        }
     }
 }
