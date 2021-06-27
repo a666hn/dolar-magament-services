@@ -2,6 +2,7 @@ import { Type } from 'class-transformer';
 import {
     ArrayMaxSize,
     ArrayMinSize,
+    IsAlphanumeric,
     IsArray,
     IsNotEmpty,
     IsOptional,
@@ -42,4 +43,10 @@ export class CategoriesDataDto {
     @IsOptional()
     @IsString()
     description: string;
+}
+
+export class CategoriesFilterQueryDto {
+    @IsOptional()
+    @IsAlphanumeric()
+    name: string;
 }

@@ -27,4 +27,20 @@ export class CategoriesTransformer {
             },
         };
     }
+
+    transformGetCategories(
+        cat: CategoriesEntity[],
+    ): DataResponse<ICategoriesData[]> {
+        const newData: ICategoriesData[] = cat.map((c: CategoriesEntity) => ({
+            name: c.name,
+            description: c.description,
+            createdAt: c.createdAt,
+            createdBy: c.createdBy,
+        }));
+
+        return {
+            message: `Mendapatkan ${cat.length} categories`,
+            data: newData,
+        };
+    }
 }

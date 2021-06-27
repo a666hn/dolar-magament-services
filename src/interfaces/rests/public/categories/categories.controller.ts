@@ -1,4 +1,13 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    NotFoundException,
+    Post,
+    Query,
+    UseGuards,
+} from '@nestjs/common';
 import { CategoriesUsecase } from 'src/applications/usecases/public/categories.usecase';
 import {
     CATEGORIES_URL,
@@ -15,6 +24,7 @@ import { CategoriesTransformer } from './categories.transformer';
 import {
     BulkInsertCategoriesDto,
     CategoriesDataDto,
+    CategoriesFilterQueryDto,
 } from './dto/categories.dto';
 import { ICategoriesData } from './interface/categories.interface';
 
@@ -63,5 +73,22 @@ export class CategoriesController {
         return this.categoriesTransformer.transformSingleCategories(
             categoriesData,
         );
+    }
+
+    @Get()
+    async GetCategories(
+        @Query() filter: CategoriesFilterQueryDto,
+    ): Promise<DataResponse<ICategoriesData[]>> {
+        const categories = await this.categoriesUsecase.GetCategories(filter);
+
+        if (
+            !categories ||
+            !Array.isArray(categories) ||
+            categories.length < 1
+        ) {
+            throw new NotFoundException('Tidak ada data categories');
+        }
+
+        return this.categoriesTransformer.transformGetCategories(categories);
     }
 }

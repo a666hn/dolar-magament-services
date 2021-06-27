@@ -4,6 +4,7 @@ import { CategoriesEntity } from 'src/infrastructures/database/postgres/entities
 import {
     BulkInsertCategoriesDto,
     CategoriesDataDto,
+    CategoriesFilterQueryDto,
 } from 'src/interfaces/rests/public/categories/dto/categories.dto';
 import { HandlePostgressError } from 'src/utils/postgress-handle-error';
 import { CategoriesRepository } from '../repositories/categories.repository';
@@ -39,5 +40,19 @@ export class CategoriesService {
         } catch (err) {
             HandlePostgressError(err.code, err.message);
         }
+    }
+
+    async GetCategories(
+        filterCategories: CategoriesFilterQueryDto,
+    ): Promise<CategoriesEntity[]> {
+        const { name } = filterCategories;
+
+        const query = this.categoriesRepository.createQueryBuilder('cat');
+
+        if (name) {
+            query.andWhere('cat.name ILIKE :name ', { name: `%${name}%` });
+        }
+
+        return query.getMany();
     }
 }

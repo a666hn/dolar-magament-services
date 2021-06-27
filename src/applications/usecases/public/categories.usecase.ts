@@ -4,6 +4,7 @@ import { CategoriesEntity } from 'src/infrastructures/database/postgres/entities
 import {
     BulkInsertCategoriesDto,
     CategoriesDataDto,
+    CategoriesFilterQueryDto,
 } from 'src/interfaces/rests/public/categories/dto/categories.dto';
 
 @Injectable()
@@ -25,5 +26,11 @@ export class CategoriesUsecase {
             categoriesDto,
             userId,
         );
+    }
+
+    async GetCategories(
+        filterCategories: CategoriesFilterQueryDto,
+    ): Promise<CategoriesEntity[]> {
+        return this.categoriesService.GetCategories(filterCategories);
     }
 }
