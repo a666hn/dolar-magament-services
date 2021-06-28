@@ -1,6 +1,7 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { BankUsecase } from 'src/applications/usecases/finance/bank/bank.usecase';
 import {
+    BANK_LIST_URL,
     BANK_URL,
     RBAC_KEY_ID,
     VERSION_1,
@@ -25,7 +26,7 @@ export class BankController {
         RBAC_KEY_ID.SYSTEM_ADMINISTRATOR_GUARD,
         RBAC_KEY_ID.ADMINISTRATOR_GUARD,
     )
-    @Post('/bank')
+    @Post(BANK_LIST_URL)
     async AddNewBank(
         @Body() createBankDto: CreateBankDto,
     ): Promise<DataResponse<IBankData>> {
