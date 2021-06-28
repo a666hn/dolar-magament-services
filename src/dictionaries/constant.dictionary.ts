@@ -49,6 +49,7 @@ export const ROLES_ASSIGN_USER_URL = 'assign-role';
 
 export const BANK_URL = 'finance';
 export const BANK_LIST_URL = 'bank';
+export const LINKED_BANK_TO_ACCOUNT_URL = 'linked';
 
 export const CATEGORIES_URL = 'categories';
 export const UPLOAD_BULK_CATEGORIES_URL = 'upload-bulk';
