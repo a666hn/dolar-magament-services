@@ -43,23 +43,14 @@ export class MapBankAccountService {
 
             await this.mapBankAccountRepository.save(mapBankToAccount);
 
-            const fullDataMapBankToAccount =
-                await this.mapBankAccountRepository.findOne(
+            const mapBankToAccountWithUserAndBank =
+                await this.mapBankAccountRepository.findAndGetUserAndBankById(
                     mapBankToAccount.id,
-                    {
-                        join: {
-                            alias: 'mapBankAccount',
-                            leftJoinAndSelect: {
-                                user: 'mapBankAccount.user',
-                                bank: 'mapBankAccount.bank',
-                            },
-                        },
-                    },
                 );
 
             await queryRunner.commitTransaction();
 
-            return fullDataMapBankToAccount;
+            return mapBankToAccountWithUserAndBank;
         } catch (err) {
             HandlePostgressError(err.code, err.message);
             queryRunner.rollbackTransaction();
@@ -71,24 +62,23 @@ export class MapBankAccountService {
     private async checkAndChangeDefaultBankAccount(
         userId: string,
     ): Promise<void> {
-        const mapBankToAccount = await this.mapBankAccountRepository.find({
+        const mapBankToAccounts = await this.mapBankAccountRepository.find({
             where: {
                 userId,
             },
             select: ['id', 'userId', 'isDefault'],
         });
 
-        const indexBankDefault = mapBankToAccount.findIndex(
+        const indexBankDefault = mapBankToAccounts.findIndex(
             (mbta: MapBankAccountEntity) => mbta.isDefault === true,
         );
 
         if (indexBankDefault > -1) {
-            const idWithDefaultBank = mapBankToAccount[indexBankDefault].id;
-            const mbta = await this.mapBankAccountRepository.findOne(
-                idWithDefaultBank,
-            );
+            const id = mapBankToAccounts[indexBankDefault].id;
+            const mbta = await this.mapBankAccountRepository.findOne(id);
 
             mbta.isDefault = false;
+
             await this.mapBankAccountRepository.save(mbta);
         }
     }
