@@ -25,6 +25,7 @@ export class BankEntity {
     @Column({
         name: 'code',
         unique: true,
+        nullable: true,
     })
     bankCode: string;
 

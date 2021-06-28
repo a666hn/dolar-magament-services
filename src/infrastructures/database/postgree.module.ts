@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import {
     HOST,
     NAME,
@@ -23,6 +24,14 @@ import {
                 synchronize: true,
                 autoLoadEntities: true,
                 uuidExtension: 'uuid-ossp',
+                subscribers: [
+                    join(
+                        __dirname,
+                        'postgres',
+                        'subscribers',
+                        '*.subscriber.{js,ts}',
+                    ),
+                ],
             }),
         }),
     ],
