@@ -26,4 +26,8 @@ export class BankUsecase {
             uid,
         );
     }
+
+    async GetBankByUser(uid: string): Promise<MapBankAccountEntity[]> {
+        return this.mapBankAccountService.GetBankByUser(uid);
+    }
 }

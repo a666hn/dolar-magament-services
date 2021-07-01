@@ -47,4 +47,39 @@ export class BankTransformer {
             },
         };
     }
+
+    transformGetBankByUser(
+        mapBankAccounts: MapBankAccountEntity[],
+    ): DataResponse<IMapBankAccountData[]> {
+        const mba: IMapBankAccountData[] = mapBankAccounts.map(
+            (m: MapBankAccountEntity) => ({
+                id: m?.id,
+                accountName: m?.accountName,
+                bankNumber: m?.bankNumber,
+                isDefault: m?.isDefault,
+                account: {
+                    id: m?.user?.id,
+                    name: m?.user?.name,
+                    email: m?.user?.email,
+                    username: m?.user?.username,
+                    isEmailVerified: m?.user?.isEmailVerified,
+                    accountStatus: m?.user?.accountStatus,
+                },
+                bank: {
+                    id: m?.bank?.id,
+                    code: m?.bank?.bankCode,
+                    name: m?.bank?.bankName,
+                    description: m?.bank?.description,
+                    createdAt: m?.bank?.createdAt,
+                },
+                createdAt: m?.createdAt,
+                updatedAt: m?.updatedAt,
+            }),
+        );
+
+        return {
+            message: `Mendapatkan ${mba.length} bank data`,
+            data: mba,
+        };
+    }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MapBankAccountEntity } from 'src/infrastructures/database/postgres/entities/map-bank-account.entity';
 import { LinkedBankToAccountDto } from 'src/interfaces/rests/finance/bank/dto/linked-bank-to-account.dto';
@@ -59,6 +59,19 @@ export class MapBankAccountService {
         }
     }
 
+    async GetBankByUser(uid: string): Promise<MapBankAccountEntity[]> {
+        const mba = await this.mapBankAccountRepository.findAllBanksByUser(uid);
+
+        if (!mba || !Array.isArray(mba) || mba.length < 1) {
+            throw new NotFoundException(
+                'Kamu belum memiliki bank yang di tautkan',
+            );
+        }
+
+        return mba;
+    }
+
+    // Pirvate methods
     private async checkAndChangeDefaultBankAccount(
         userId: string,
     ): Promise<void> {

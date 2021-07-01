@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    Post,
+    UseGuards,
+} from '@nestjs/common';
 import { BankUsecase } from 'src/applications/usecases/finance/bank/bank.usecase';
 import {
     BANK_LIST_URL,
@@ -15,7 +22,7 @@ import { RequiredRBAC } from 'src/guards/rbac.metadata';
 import { BankTransformer } from './bank.transformer';
 import { CreateBankDto } from './dto/create-bank.dto';
 import { LinkedBankToAccountDto } from './dto/linked-bank-to-account.dto';
-import { IBankData } from './interface/bank.interface';
+import { IBankData, IMapBankAccountData } from './interface/bank.interface';
 
 @Controller(`/${VERSION_1}/${BANK_URL}`)
 export class BankController {
@@ -48,12 +55,22 @@ export class BankController {
     async LinkedBankToAccount(
         @Body() linkBankToAccountDto: LinkedBankToAccountDto,
         @GetAuthenticatedUser('id') uid: string,
-    ): Promise<DataResponse<any>> {
+    ): Promise<DataResponse<IMapBankAccountData>> {
         const mapBankAccount = await this.bankUsecase.LinkedBankToAccount(
             linkBankToAccountDto,
             uid,
         );
 
         return this.bankTransformer.transformMapBankAccount(mapBankAccount);
+    }
+
+    @UseGuards(JWTGuard)
+    @HttpCode(200)
+    @Get(BANK_LIST_URL)
+    async GetBankByUser(
+        @GetAuthenticatedUser('id') uid: string,
+    ): Promise<DataResponse<IMapBankAccountData[]>> {
+        const mapBankToAccounts = await this.bankUsecase.GetBankByUser(uid);
+        return this.bankTransformer.transformGetBankByUser(mapBankToAccounts);
     }
 }
