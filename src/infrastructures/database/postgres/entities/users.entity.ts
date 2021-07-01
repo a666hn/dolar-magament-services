@@ -59,7 +59,7 @@ export class UsersEntity extends BaseEntity {
         enumName: 'account_status_enum',
         name: 'account_status',
     })
-    accountStatus: string;
+    accountStatus: ACCOUNT_STATUS;
 
     @Column({
         nullable: true,
