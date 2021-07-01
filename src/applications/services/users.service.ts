@@ -92,7 +92,7 @@ export class UserService {
 
         if (!user) {
             throw new NotFoundException(
-                `Kami tidak bisa menemukan user dengan username/email "${username}"`,
+                `Kami tidak bisa menemukan user dengan username/email "${username}". Pastikan kamu telah terdaftar, atau status kamu telah active`,
             );
         }
 

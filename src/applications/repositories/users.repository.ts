@@ -1,7 +1,7 @@
 import { UsersEntity } from 'src/infrastructures/database/postgres/entities/users.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Logger, NotFoundException } from '@nestjs/common';
 import { ACCOUNT_STATUS } from 'src/globals/global.enum';
 
 @EntityRepository(UsersEntity)
@@ -13,9 +13,21 @@ export class UsersRepository extends Repository<UsersEntity> {
     }
 
     async findUserByEmailOrUsername(keyword: string): Promise<UsersEntity> {
-        return this.findOne({
-            where: [{ email: keyword }, { username: keyword }],
-        });
+        const query = this.createQueryBuilder('user');
+
+        if (!keyword) {
+            throw new BadRequestException('Username atau email dibutuhkan');
+        }
+
+        query.where(
+            'user.accountStatus IN (:...status) AND (user.email = :keyword OR user.username = :keyword)',
+            {
+                keyword,
+                status: [ACCOUNT_STATUS.ACTIVE, ACCOUNT_STATUS.REGISTERED],
+            },
+        );
+
+        return query.getOne();
     }
 
     async checkPassword(user: UsersEntity, password: string): Promise<boolean> {
