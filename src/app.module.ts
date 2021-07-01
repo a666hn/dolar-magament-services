@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 import { CoreModule } from './core/core.module';
 import { AppController } from './app.controller';
 import { PostgreeModule } from './infrastructures/database/postgree.module';
-import { AdminPanelModule } from './module.list';
+import { AdminPanelModule, FinanceModule, PublicModule } from './module.list';
 
 dotenv.config();
 
@@ -15,7 +15,14 @@ dotenv.config();
         PostgreeModule,
         CoreModule,
 
+        // Module untuk admin panel
         ...AdminPanelModule,
+
+        // Module yang menghandle semua jenis finance
+        ...FinanceModule,
+
+        // Module yang menghandle public request
+        ...PublicModule,
     ],
     controllers: [AppController],
     providers: [],
