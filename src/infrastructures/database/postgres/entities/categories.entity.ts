@@ -1,4 +1,3 @@
-import { CATEGORIES_ENTITY } from 'src/dictionaries/constant.dictionary';
 import {
     BeforeUpdate,
     Column,
@@ -13,7 +12,7 @@ import {
 import { BaseEntity } from '../base.entity';
 import { UsersEntity } from './users.entity';
 
-@Entity(CATEGORIES_ENTITY)
+@Entity({ name: 'categories' })
 @Index('catgeories_name_idx', ['name'], { unique: true })
 @Index('categories_created_updated_idx', ['createdBy', 'updatedBy'])
 export class CategoriesEntity extends BaseEntity {

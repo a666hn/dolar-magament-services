@@ -1,4 +1,3 @@
-import { MAP_BANK_ACCOUNT_ENTITY } from 'src/dictionaries/constant.dictionary';
 import {
     BeforeUpdate,
     Column,
@@ -14,7 +13,7 @@ import { BaseEntity } from '../base.entity';
 import { BankEntity } from './bank.entity';
 import { UsersEntity } from './users.entity';
 
-@Entity(MAP_BANK_ACCOUNT_ENTITY)
+@Entity({ name: 'map_bank_account' })
 @Index('map_bank_account_user_bank_idx', ['bankId', 'userId', 'bankNumber'], {
     unique: true,
 })

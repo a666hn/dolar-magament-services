@@ -2,13 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import {
-    HOST,
-    NAME,
-    PASSWORD,
-    PORT,
-    USERNAME,
-} from 'src/dictionaries/constant.dictionary';
 
 @Module({
     imports: [
@@ -16,11 +9,11 @@ import {
             inject: [ConfigService],
             useFactory: async (env: ConfigService) => ({
                 type: 'postgres',
-                host: env.get(HOST),
-                port: Number(env.get(PORT)),
-                username: env.get(USERNAME),
-                password: env.get(PASSWORD),
-                database: env.get(NAME),
+                host: env.get('APP_HOST'),
+                port: Number(env.get('DATABASE_PORT_ACCOUNT')),
+                username: env.get('DATABASE_USER_ACCOUNT'),
+                password: env.get('DATABASE_PASSWORD_ACCOUNT'),
+                database: env.get('DATABASE_NAME_ACCOUNT'),
                 synchronize: true,
                 autoLoadEntities: true,
                 uuidExtension: 'uuid-ossp',

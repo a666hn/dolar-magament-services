@@ -15,7 +15,7 @@ import {
 import { MapRolePermissionsEntity } from './map-role-permissions.entity';
 import { MapUserRoleEntity } from './map-user-role.entity';
 
-@Entity(ROLE_ENTITY)
+@Entity({ name: ROLE_ENTITY })
 @Index('role_idx', ['name'], { unique: true })
 export class RolesEntity {
     @PrimaryColumn()
@@ -35,37 +35,37 @@ export class RolesEntity {
     @CreateDateColumn({
         name: 'created_at',
     })
-    createdAt: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn({
         name: 'updated_at',
     })
-    updatedAt: Date;
+    updatedAt?: Date;
 
     @DeleteDateColumn({
         name: 'deleted_at',
     })
-    deletedAt: Date;
+    deletedAt?: Date;
 
     @Column({
         type: 'int4',
         default: 0,
     })
-    versions: number;
+    versions?: number;
 
     @OneToMany(() => MapRolePermissionsEntity, (mrp) => mrp.role)
-    public mapRolePermissions: MapRolePermissionsEntity[];
+    public mapRolePermissions?: MapRolePermissionsEntity[];
 
     @OneToMany(() => MapUserRoleEntity, (mur) => mur.user)
-    public mapUserRoles: MapUserRoleEntity[];
+    public mapUserRoles?: MapUserRoleEntity[];
 
     @BeforeInsert()
-    updateNameAfterInsert() {
+    updateNameAfterInsert?() {
         this.name = toUpper(this.name);
     }
 
     @BeforeUpdate()
-    updateNameAfterUpdateData() {
+    updateNameAfterUpdateData?() {
         this.name = toUpper(this.name);
         this.versions += 1;
     }

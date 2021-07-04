@@ -1,4 +1,3 @@
-import { MAP_USER_ROLE_ENTITY } from 'src/dictionaries/constant.dictionary';
 import {
     BeforeUpdate,
     Column,
@@ -14,7 +13,7 @@ import { BaseEntity } from '../base.entity';
 import { RolesEntity } from './roles.entity';
 import { UsersEntity } from './users.entity';
 
-@Entity(MAP_USER_ROLE_ENTITY)
+@Entity({ name: 'map_user_role' })
 @Index('map_user_role_userid_roleid_idx', ['userId', 'roleId'], {
     unique: true,
 })

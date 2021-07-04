@@ -1,4 +1,3 @@
-import { BANK_ENTITY } from 'src/dictionaries/constant.dictionary';
 import {
     BeforeUpdate,
     Column,
@@ -12,7 +11,7 @@ import {
 } from 'typeorm';
 import { MapBankAccountEntity } from './map-bank-account.entity';
 
-@Entity(BANK_ENTITY)
+@Entity({ name: 'bank' })
 @Index('bank_id_name_code_idx', ['id', 'bankCode', 'bankName'], {
     unique: true,
 })

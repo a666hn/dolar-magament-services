@@ -1,4 +1,3 @@
-import { PERMISSION_ENTITY } from 'src/dictionaries/constant.dictionary';
 import {
     BeforeUpdate,
     Column,
@@ -12,7 +11,7 @@ import {
 import { BaseEntity } from '../base.entity';
 import { MapRolePermissionsEntity } from './map-role-permissions.entity';
 
-@Entity(PERMISSION_ENTITY)
+@Entity({ name: 'permissions' })
 @Index('permission_idx', ['name'], { unique: true })
 export class PermissionsEntity extends BaseEntity {
     @Column({

@@ -1,4 +1,3 @@
-import { USER_ENTITY } from 'src/dictionaries/constant.dictionary';
 import {
     BeforeInsert,
     BeforeUpdate,
@@ -16,13 +15,13 @@ import { BaseEntity } from '../base.entity';
 import * as bcrypt from 'bcrypt';
 import { UserProfilesEntity } from './user_profiles.entity';
 import { toUpper } from 'lodash';
-import { ACCOUNT_STATUS } from 'src/globals/global.enum';
+import { ACCOUNT_STATUS } from '../../../../globals/global.enum';
 import { MapUserRoleEntity } from './map-user-role.entity';
 import { MapBankAccountEntity } from './map-bank-account.entity';
 
 @Index('user_email_username_idx', ['email', 'username'], { unique: true })
 @Index('user_name_accountstatus_idx', ['name', 'accountStatus'])
-@Entity(USER_ENTITY)
+@Entity({ name: 'users' })
 export class UsersEntity extends BaseEntity {
     @Column({
         nullable: false,
@@ -50,7 +49,7 @@ export class UsersEntity extends BaseEntity {
         name: 'is_email_verified',
         default: false,
     })
-    isEmailVerified: boolean;
+    isEmailVerified?: boolean;
 
     @Column({
         nullable: false,
@@ -59,34 +58,34 @@ export class UsersEntity extends BaseEntity {
         enumName: 'account_status_enum',
         name: 'account_status',
     })
-    accountStatus: ACCOUNT_STATUS;
+    accountStatus?: ACCOUNT_STATUS;
 
     @Column({
         nullable: true,
         name: 'profile_id',
     })
-    profileId: string;
+    profileId?: string;
 
     @CreateDateColumn({
         name: 'created_at',
     })
-    createdAt: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn({
         name: 'updated_at',
     })
-    updatedAt: Date;
+    updatedAt?: Date;
 
     @DeleteDateColumn({
         name: 'deleted_at',
     })
-    deletedAt: Date;
+    deletedAt?: Date;
 
     @Column({
         type: 'int4',
         default: 0,
     })
-    versions: number;
+    versions?: number;
 
     @OneToOne(() => UserProfilesEntity, {
         nullable: true,
@@ -95,27 +94,27 @@ export class UsersEntity extends BaseEntity {
         name: 'profile_id',
         referencedColumnName: 'id',
     })
-    profile: UserProfilesEntity;
+    profile?: UserProfilesEntity;
 
     @OneToMany(() => MapUserRoleEntity, (mur) => mur.user)
-    mapUserRoles: MapUserRoleEntity[];
+    mapUserRoles?: MapUserRoleEntity[];
 
     @OneToMany(() => MapBankAccountEntity, (mab) => mab.user)
-    mapBankAccount: MapBankAccountEntity[];
+    mapBankAccount?: MapBankAccountEntity[];
 
     @BeforeInsert()
-    updateFullName() {
+    updateFullName?() {
         this.name = toUpper(this.name);
     }
 
     @BeforeInsert()
-    async updatePassword() {
+    async updatePassword?() {
         const SALT = await bcrypt.genSalt();
         this.password = await bcrypt.hash(this.password, SALT);
     }
 
     @BeforeUpdate()
-    updatedVersionRow() {
+    updatedVersionRow?() {
         this.versions += 1;
     }
 }

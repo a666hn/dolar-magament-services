@@ -10,20 +10,20 @@ import {
 } from 'typeorm';
 import { BaseEntity } from '../base.entity';
 
-@Entity(USER_PROFILE_ENTITY)
+@Entity({ name: USER_PROFILE_ENTITY })
 @Index('user_profile_idx', ['phoneNumber'], { unique: true })
 export class UserProfilesEntity extends BaseEntity {
     @Column({
         type: 'text',
         nullable: true,
     })
-    bio: string;
+    bio?: string;
 
     @Column('simple-array', {
         nullable: true,
         name: 'social_media',
     })
-    socialMedia: string[];
+    socialMedia?: string[];
 
     @Column('simple-json', {
         nullable: true,
@@ -40,36 +40,36 @@ export class UserProfilesEntity extends BaseEntity {
         name: 'phone_number',
         nullable: true,
     })
-    phoneNumber: string;
+    phoneNumber?: string;
 
     @Column({
         nullable: true,
     })
-    address: string;
+    address?: string;
 
     @CreateDateColumn({
         name: 'created_at',
     })
-    createdAt: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn({
         name: 'updated_at',
     })
-    updatedAt: Date;
+    updatedAt?: Date;
 
     @DeleteDateColumn({
         name: 'deleted_at',
     })
-    deletedAt: Date;
+    deletedAt?: Date;
 
     @Column({
         type: 'int4',
         default: 0,
     })
-    versions: number;
+    versions?: number;
 
     @BeforeUpdate()
-    updatedVersionRow() {
+    updatedVersionRow?() {
         this.versions += 1;
     }
 }
